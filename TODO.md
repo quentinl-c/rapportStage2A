@@ -15,8 +15,8 @@ Introduction
 
 ####1. Présentation du Loria
 
-* Présentation générale
-* Présentation des différents départements 
+* Présentation générale (done)
+* Présentation des différents départements (done)
 
 ####2. Présentation de l'équipe COAST 
 
