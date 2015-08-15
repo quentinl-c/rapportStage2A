@@ -59,7 +59,7 @@ Introduction
 * Développement d'un prototype pour valider le choix de la librairie 
 	* Présentation du prototype
 
-#####2. Adaptation d'un de l'outil
+#####2. Implémentation du système pair-à-pair dans MUTE
 	
 * Implémentation d'un module pair-à-pair dans l'architecture de mute
 * Description du fonctionnement du système p2p
@@ -94,5 +94,9 @@ Introduction
 
 * SCAMP (gossiping en général), une piste de réflexion qui mériterait d’être approfondie
 * La sécurité dans ces réseaux ...
+
+
+##Biblio :
+* http://www.journaldunet.com/solutions/0601/060105_tribune-sqli-web-20.shtml
 
 
