@@ -81,12 +81,12 @@ l'information. Une dimension collaborative sous forme de blog, wiki, réseaux so
 
 La multiplication des périphériques connectés tels que les tablettes et les smartphones a permis de démocratiser l'accès au web. 
 Les applications "Desktops" principalement utilisées sur les ordinateurs n'étaient alors plus suffisantes pour répondre aux contraintes
-d'un environnement décentralisé. Le partage des différents contenus multimédia avec tous ces appareils se révélait être une nécessité.
-L'augmentation de la puissance des serveurs hébergeant ces applications web 2.0 a permis progressivement l'apparition d'applications 
-plus complexes étant susceptibles de remplacer ces applications "Desktops". De nouvelles suites Office online ont alors vu le jour, 
-s'inspirant des applications "Desktops" et y incorporant la dimension collaborative inspirée par le web 2.0. L'exemple le plus 
-marquant étant bien évidemment celui de Google qui propose une suite d'applications : Google Docs, Google Sheets, Google Slides et 
-Google Forms. Toutes ces applications permettent de travailler en collaboration avec plusieurs acteurs sur un même document. De plus, elles fournissent une interface utilisateur similaire à celles proposées par les applications "Desktops". L'utilisateur n'est alors pas déstabilisé et retrouve aisément ses repères. La figure~\ref{fig:g-doc} présente ainsi l'interface de Google Doc, une application permettant de faire du traitement de texte en édition collaborative.
+d'un environnement numérique pluriel. Le partage des différents contenus multimédia avec tous ces appareils se révélait être une 
+nécessité.L'augmentation de la puissance des serveurs hébergeant ces applications web 2.0 a permis progressivement l'apparition 
+d'applications plus complexes étant susceptibles de remplacer ces applications "Desktops". De nouvelles suites Office online ont alors 
+vu le jour, s'inspirant des applications "Desktops" et y incorporant la dimension collaborative inspirée par le web 2.0. 
+
+L'exemple le plus marquant étant bien évidemment celui de Google qui propose une suite d'applications : Google Docs, Google Sheets, Google Slides et Google Forms. Toutes ces applications permettent de travailler en collaboration avec plusieurs acteurs sur un même document. De plus, elles fournissent une interface utilisateur similaire à celles proposées par les applications "Desktops". L'utilisateur n'est alors pas déstabilisé et retrouve aisément ses repères. La figure~\ref{fig:g-doc} présente ainsi l'interface de Google Doc, une application permettant de faire du traitement de texte en édition collaborative.
 
 
 \begin{figure}[h]
@@ -95,6 +95,20 @@ Google Forms. Toutes ces applications permettent de travailler en collaboration 
   \caption{Interface de l'application Google Doc}
   \label{fig:g-doc}
 \end{figure}
+
+Toutes ces applications ont permis de rendre accessible le travail collaboratif. La présence physique de tous les contributeurs dans 
+un même lieu n'est alors plus requise. Le travail sur des projets interdisciplinaires s'en trouve alors plus aisé. Chaque contributeur 
+au projet peut ainsi composer tout en visualisant en temps réel la contribution des autres protagonistes. Cet aspect temps réel est 
+primordial dans le domaine de l'édition collaborative, sans cela les différents contributeurs du projet ne peuvent constater 
+l'évolution immédiate du document. Ce qui pourrait conduire à d'importantes erreurs dans la réalisation de ce dernier. L'application se doit donc d'être réactive pour répercuter le plus rapidement possible les différentes modifications du document. Se pose ainsi le 
+problème du passage à l'échelle : si l'application offre des temps de réaction satisfaisants pour un nombre réduit de collaborateurs, 
+en est-il de même pour un nombre plus important ? 
+
+L'architecture client/serveur très largement utilisée pour ce type d'application peut montrer certaines faiblesses en période de montée en charge. En effet,le serveur devant gérer les communications entre tous les clients et maintenir une copie cohérente du document peut se retrouver débordé si le nombre de collaborateurs augmente de manière importante. Les performances de l'application se verraient alors dégradées, et l'expérience utilisateur entachée par des temps de latence importants. Un des moyens de répondre à cette problématique est de développer un réseau pair-à-pair entre tous les clients d'un même document. Les données ne transiteraient plus par le serveur, mais seraient directement émises d'un client vers les autres clients. Cette communication directe entre chaque client permet de conserver des performances correctes même en cas de montée en charge. 
+
+J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE, de façon à y incorporer un mécanisme d'échange pair-à-
+pair. Je dois pour cela utiliser la technologie web-rtc, qui permet d'établir des connexions pair-à-pair entre deux clients par le 
+biais du navigateur web. 
 
 \cleardoublepage
 
@@ -163,17 +177,7 @@ La Figure~\ref{fig:logo-tn} représente le logo de \reportSchool{}.
 
 Ceci est une référence bibliographique~\cite{GOT4}.
 
-\subsection{Première sous-section}
-
-\subsubsection{Première sous-sous section}
-
 \section{Présentation des technologies webrtc}
-
-
-
-
-
-
 
 \cleardoublepage
 
@@ -200,6 +204,7 @@ Ceci est une référence bibliographique~\cite{GOT4}.
 \chapter{Conclusion}
 
 \cleardoublepage
+
 \renewcommand{\tocbibname}{Bibliographie / Webographie}
 \bibliography{example} % See example.bib 
 \bibliographystyle{plain}
