@@ -194,7 +194,7 @@ L'application MUTE adopte initialement une architecture client/serveur. Tous les
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=6cm]{figures/client-server}
+  \includegraphics[width=5cm]{figures/client-server}
   \caption{Architecture client/serveur - le serveur au centre de toutes les communications}
   \label{fig:cli-serv}
 \end{figure}
@@ -207,12 +207,12 @@ Le client est composé de quatre modules :
 \begin{itemize}
 \item Ace-editor : librairie utilisée pour créer l'éditeur de texte qui apparait à l'écran du client
 \item InfoUser : module permettant de gérer les informations de l'utilisateur et des autres contributeurs
-\item Coordinator : module permettant de gérer le model \footnote{Sous la forme de structures LogootSplit} et utilisant l'algorithme LogootSplit pour l'application des opérations texte
+\item Coordinator : module permettant de gérer le modèle \footnote{Sous la forme de structures LogootSplit} et utilisant l'algorithme LogootSplit pour l'application des opérations texte
 \item Socket-io-adapter : module en charge de la communication avec le serveur
 \end{itemize}
 
 L'organisation de ces modules est décrite dans la Figure~\ref{fig:mute-archi} 
-Chaque collaborateur est identifié de manière unique grâce à un \emph{replicanumber} donné par le serveur. 
+Chaque collaborateur est identifié de manière unique grâce à un \emph{numéro de site} donné par le serveur. 
 
 \subsubsection{Architecture du serveur}
 L'architecture du serveur est semblable à celle du client, à la différence qu'elle n'utilise pas Ace-editor.
@@ -220,7 +220,7 @@ Elle se compose donc de trois modules :
 
 \begin{itemize}
 \item InfoUser : module permettant de gérer les informations de tous les utilisateurs d'un document
-\item Coordinator : module permettant de gérer le model et utilisant l'algorithme LogootSplit pour l'application des opérations texte
+\item Coordinator : module permettant de gérer le modèle et utilisant l'algorithme LogootSplit pour l'application des opérations texte
 \item Socket-io-adapter : module en charge de la communication avec les clients
 \end{itemize}
 
@@ -230,14 +230,21 @@ La Figure~\ref{fig:mute-archi} représente le fonctionnement de l'architecture M
 
 Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opérations texte qui vont être transmises au coordinateur\footnote{ou coordinator en anglais}. Le coordinateur va en suite générer les opérations Logoot pour les opérateurs distants\footnote{Les opérateurs distants correspondent aux autres clients et au serveur} et va transmettre ces opérations au module socket-io-adapter. Les opérations vont être ainsi transmises au serveur.
 
-À la réception des opérations Logoot par le serveur, ce dernier va transmettre ces opérations à son coordinateur et dans le même temps, les enverra aux autres contributeurs du document. Le coordinateur du serveur va appliquer les opérations Logoot de façon à conserver une copie à jour du document. Les autres contributeurs vont faire de même et vont répercuter les modifications sur leur modèle local. Une fois les opérations appliquées, la vue de l'éditeur va se mettre à jour pour que l'utilisateur puisse visualiser les modifications.
+À la réception des opérations Logoot par le serveur, ce dernier va transmettre ces opérations à son coordinateur et dans le même temps, les enverra aux autres contributeurs du document. Le coordinateur du serveur va appliquer les opérations Logoot de façon à conserver une copie à jour du document. Les autres contributeurs vont faire de même et vont répercuter les modifications sur leur modèle local. Une fois les opérations appliquées, la vue de l'éditeur va se mettre à jour pour que les autres utilisateurs puissent visualiser les modifications.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=16cm]{figures/MUTE-archi}
+  \includegraphics[width=17cm]{figures/MUTE-archi}
   \caption{Architecture et fonctionnement de l'application MUTE}
   \label{fig:mute-archi}
 \end{figure}
+
+\subsubsection{Avantages et limites de cette architecture}
+
+Cette architecture est adaptée pour le développement rapide d'un prototype fonctionnel, elle permet une gestion centralisée des documents et les nombreuses librairies disponibles permettent de gérer de façon fiable les connexions client-serveur. Cependant cette architecture rencontre des problèmes de passage à l'échelle. En effet, le serveur devant gérer l'ensemble des documents et toutes les communications avec les clients peut se retrouver rapidement débordé si le nombre de documents et/ou de collaborateurs venait à augmenter. Une solution pourrait être d'augmenter les moyens matériels, à savoir la puissance des serveurs, cependant cette solution est relativement couteuse et par conséquent non viable sur le long terme.
+
+Il est alors nécessaire de s'affranchir de cette architecture centralisée du moins pour les échanges d'opérations texte, de façon à soulager le serveur. Une solution est donc de créer des connexions directes entre les clients. Une technologie nommée webRTC permet de créer des connexions pair-à-pair entre clients par le biais d'un navigateur web. C'est cette solution a été retenue pour répondre au problème de scalabilité.
+
 
 %La Figure~\ref{fig:logo-tn} représente le logo de \reportSchool{}.%
 
