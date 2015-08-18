@@ -116,9 +116,7 @@ problématique est de développer un réseau pair-à-pair entre tous les clients
 par le serveur, mais seraient directement émises d'un client vers les autres clients. Cette communication directe entre chaque client 
 permet de conserver des performances correctes même en cas de montée en charge. 
 
-J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE\footnote{Multi User Text Editor}, de façon à y 
-incorporer un mécanisme d'échange pair-à-pair. Je dois pour cela utiliser la technologie web-rtc, qui permet d'établir des connexions 
-pair-à-pair entre deux clients par le biais du navigateur web. Mon travail consiste donc à choisir les outils de développement les 
+J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE\footnote{Pour : Multi-User Text Editor, l'acronyme MUTE sera utilisé tout au long du rapport}, de façon à y incorporer un mécanisme d'échange pair-à-pair. Je dois pour cela utiliser la technologie web-rtc, qui permet d'établir des connexions pair-à-pair entre deux clients par le biais du navigateur web. Mon travail consiste donc à choisir les outils de développement les 
 plus adaptés pour utiliser la technologie web-rtc et de développer un module de communication pair-à-pair pour l'application MUTE. 
 
 
@@ -176,16 +174,32 @@ Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des
 
 \section{Présentation de MUTE}
 
-L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
+L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
 
 L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Doc. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
 
 Une seconde approche plus appropriée consiste à décomposer le document en ensembles atomiques. L'algorithme permet uniquement l'insertion ou la suppression d'un élément et l'unicité de tous les éléments permet de résoudre les conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
 
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=14cm]{figures/screenshot-mute}
+  \caption{Interface de l'application MUTE}
+  \label{fig:screen-mute}
+\end{figure}
+
 
 \subsection{Architecture et fonctionnement de MUTE}
 
-L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme le nom de l'utilisateur et la position du curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une web-socket. Le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
+L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une web-socket. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=6cm]{figures/client-server}
+  \caption{Architecture client/serveur - le serveur au centre de toutes les communications}
+  \label{fig:cli-serv}
+\end{figure}
+
+
 
 \subsubsection{Architecture du client}
 Le client est composé de quatre modules :
@@ -198,7 +212,7 @@ Le client est composé de quatre modules :
 \end{itemize}
 
 L'organisation de ces modules est décrite dans la Figure~\ref{fig:mute-archi} 
-De plus, il est important de remarquer que le serveur attribut à chaque un client, un identifiant unique nommé \emph{replicanumber}. 
+Chaque collaborateur est identifié de manière unique grâce à un \emph{replicanumber} donné par le serveur. 
 
 \subsubsection{Architecture du serveur}
 L'architecture du serveur est semblable à celle du client, à la différence qu'elle n'utilise pas Ace-editor.
@@ -210,9 +224,17 @@ Elle se compose donc de trois modules :
 \item Socket-io-adapter : module en charge de la communication avec les clients
 \end{itemize}
 
-\begin{figure}[h]
+\subsubsection{Fonctionnement de MUTE}
+
+La Figure~\ref{fig:mute-archi} représente le fonctionnement de l'architecture MUTE. Deux clients et le serveur y sont représentés, un client est en train de rédiger, pendant que le second visualise les modifications. Le cheminement des données est représenté par des flèches et chaque étape est décrite dans les encadrés bleus.
+
+Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opérations texte qui vont être transmises au coordinateur\footnote{ou coordinator en anglais}. Le coordinateur va en suite générer les opérations Logoot pour les opérateurs distants\footnote{Les opérateurs distants correspondent aux autres clients et au serveur} et va transmettre ces opérations au module socket-io-adapter. Les opérations vont être ainsi transmises au serveur.
+
+À la réception des opérations Logoot par le serveur, ce dernier va transmettre ces opérations à son coordinateur et dans le même temps, les enverra aux autres contributeurs du document. Le coordinateur du serveur va appliquer les opérations Logoot de façon à conserver une copie à jour du document. Les autres contributeurs vont faire de même et vont répercuter les modifications sur leur modèle local. Une fois les opérations appliquées, la vue de l'éditeur va se mettre à jour pour que l'utilisateur puisse visualiser les modifications.
+
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=18cm]{figures/MUTE-archi}
+  \includegraphics[width=17cm]{figures/MUTE-archi}
   \caption{Architecture et fonctionnement de l'application MUTE}
   \label{fig:mute-archi}
 \end{figure}
