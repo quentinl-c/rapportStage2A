@@ -243,7 +243,7 @@ Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opér
 
 Cette architecture est adaptée pour le développement rapide d'un prototype fonctionnel, elle permet une gestion centralisée des documents et les nombreuses librairies disponibles permettent de gérer de façon fiable les connexions client-serveur. Cependant cette architecture rencontre des problèmes de passage à l'échelle. En effet, le serveur devant gérer l'ensemble des documents et toutes les communications avec les clients peut se retrouver rapidement débordé si le nombre de documents et/ou de collaborateurs venait à augmenter. Une solution pourrait être d'augmenter les moyens matériels, à savoir la puissance des serveurs, cependant cette solution est relativement couteuse et par conséquent non viable sur le long terme.
 
-Il est alors nécessaire de s'affranchir de cette architecture centralisée du moins pour les échanges d'opérations texte, de façon à soulager le serveur. Une solution est donc de créer des connexions directes entre les clients. Une technologie nommée webRTC permet de créer des connexions pair-à-pair entre clients par le biais d'un navigateur web. C'est cette solution a été retenue pour répondre au problème de scalabilité.
+Il est alors nécessaire de s'affranchir de cette architecture centralisée du moins pour les échanges d'opérations texte, de façon à soulager le serveur. Une solution est donc de créer des connexions directes entre les clients. Une technologie nommée webRTC permet de créer des connexions pair-à-pair entre clients par le biais d'un navigateur web. Cette solution a été retenue pour répondre au problème de scalabilité du système.
 
 
 %La Figure~\ref{fig:logo-tn} représente le logo de \reportSchool{}.%
