@@ -116,10 +116,10 @@ problématique est de développer un réseau pair-à-pair entre tous les clients
 par le serveur, mais seraient directement émises d'un client vers les autres clients. Cette communication directe entre chaque client 
 permet de conserver des performances correctes même en cas de montée en charge. 
 
-J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE, de façon à y incorporer un mécanisme d'échange pair-à-
-pair. Je dois pour cela utiliser la technologie web-rtc, qui permet d'établir des connexions pair-à-pair entre deux clients par le 
-biais du navigateur web. Mon travail consiste donc à choisir les outils de développement les plus adaptés pour utiliser la technologie 
-web-rtc et de développer un module de communication pair-à-pair pour l'application MUTE. 
+J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE\footnote{Multi User Text Editor}, de façon à y 
+incorporer un mécanisme d'échange pair-à-pair. Je dois pour cela utiliser la technologie web-rtc, qui permet d'établir des connexions 
+pair-à-pair entre deux clients par le biais du navigateur web. Mon travail consiste donc à choisir les outils de développement les 
+plus adaptés pour utiliser la technologie web-rtc et de développer un module de communication pair-à-pair pour l'application MUTE. 
 
 
 \cleardoublepage
@@ -176,18 +176,50 @@ Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des
 
 \section{Présentation de MUTE}
 
-Exemple d'illustration :
+L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
+
+L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Doc. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
+
+Une seconde approche plus appropriée consiste à décomposer le document en ensembles atomiques. L'algorithme permet uniquement l'insertion ou la suppression d'un élément et l'unicité de tous les éléments permet de résoudre les conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
+
+
+\subsection{Architecture et fonctionnement de MUTE}
+
+L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme le nom de l'utilisateur et la position du curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une web-socket. Le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
+
+\subsubsection{Architecture du client}
+Le client est composé de quatre modules :
+
+\begin{itemize}
+\item Ace-editor : librairie utilisée pour créer l'éditeur de texte qui apparait à l'écran du client
+\item InfoUser : module permettant de gérer les informations de l'utilisateur et des autres contributeurs
+\item Coordinator : module permettant de gérer le model \footnote{Sous la forme de structures LogootSplit} et utilisant l'algorithme LogootSplit pour l'application des opérations texte
+\item Socket-io-adapter : module en charge de la communication avec le serveur
+\end{itemize}
+
+L'organisation de ces modules est décrite dans la Figure~\ref{fig:mute-archi} 
+De plus, il est important de remarquer que le serveur attribut à chaque un client, un identifiant unique nommé \emph{replicanumber}. 
+
+\subsubsection{Architecture du serveur}
+L'architecture du serveur est semblable à celle du client, à la différence qu'elle n'utilise pas Ace-editor.
+Elle se compose donc de trois modules :
+
+\begin{itemize}
+\item InfoUser : module permettant de gérer les informations de tous les utilisateurs d'un document
+\item Coordinator : module permettant de gérer le model et utilisant l'algorithme LogootSplit pour l'application des opérations texte
+\item Socket-io-adapter : module en charge de la communication avec les clients
+\end{itemize}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=10cm]{figures/school-logo}
-  \caption{Logo de TELECOM Nancy}
-  \label{fig:logo-tn}
+  \includegraphics[width=18cm]{figures/MUTE-archi}
+  \caption{Architecture et fonctionnement de l'application MUTE}
+  \label{fig:mute-archi}
 \end{figure}
 
-La Figure~\ref{fig:logo-tn} représente le logo de \reportSchool{}.
+%La Figure~\ref{fig:logo-tn} représente le logo de \reportSchool{}.%
 
-Ceci est une référence bibliographique~\cite{GOT4}.
+% Ceci est une référence bibliographique~\cite{GOT4}.
 
 \section{Présentation des technologies webrtc}
 
@@ -195,11 +227,11 @@ Ceci est une référence bibliographique~\cite{GOT4}.
 
 \chapter{Présentation du travail réalisée}
 
-\section{Présentation de la problématique détaillée et du contexte}
+\section{Présentation du contexte et de la problématique détaillée}
 
 \section{Réalisation d'un système de communication pair-à-pair pour l'outil MUTE}
 
-\subsection{Choix de la librairie et développement d'un prototype pour valider le choix}
+\subsection{Choix de la librairie et développement d'un prototype}
 
 \subsection{Implémentation du système pair-à-pair dans MUTE}
 
