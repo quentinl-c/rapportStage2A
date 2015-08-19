@@ -205,10 +205,10 @@ L'application MUTE adopte initialement une architecture client/serveur. Tous les
 Le client est composé de quatre modules :
 
 \begin{itemize}
-\item Ace-editor : librairie utilisée pour créer l'éditeur de texte qui apparait à l'écran du client
-\item InfoUser : module permettant de gérer les informations de l'utilisateur et des autres contributeurs
-\item Coordinator : module permettant de gérer le modèle \footnote{Sous la forme de structures LogootSplit} et utilisant l'algorithme LogootSplit pour l'application des opérations texte
-\item Socket-io-adapter : module en charge de la communication avec le serveur
+    \item Ace-editor : librairie utilisée pour créer l'éditeur de texte qui apparait à l'écran du client
+    \item InfoUser : module permettant de gérer les informations de l'utilisateur et des autres contributeurs
+    \item Coordinator : module permettant de gérer le modèle \footnote{Sous la forme de structures LogootSplit} et utilisant l'algorithme LogootSplit pour l'application des opérations texte
+    \item Socket-io-adapter : module en charge de la communication avec le serveur
 \end{itemize}
 
 L'organisation de ces modules est décrite dans la Figure~\ref{fig:mute-archi} 
@@ -219,9 +219,9 @@ L'architecture du serveur est semblable à celle du client, à la différence qu
 Elle se compose donc de trois modules :
 
 \begin{itemize}
-\item InfoUser : module permettant de gérer les informations de tous les utilisateurs d'un document
-\item Coordinator : module permettant de gérer le modèle et utilisant l'algorithme LogootSplit pour l'application des opérations texte
-\item Socket-io-adapter : module en charge de la communication avec les clients
+  \item InfoUser : module permettant de gérer les informations de tous les utilisateurs d'un document
+  \item Coordinator : module permettant de gérer le modèle et utilisant l'algorithme LogootSplit pour l'application des opérations texte
+  \item Socket-io-adapter : module en charge de la communication avec les clients
 \end{itemize}
 
 \subsubsection{Fonctionnement de MUTE}
@@ -241,7 +241,7 @@ Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opér
 
 \subsubsection{Avantages et limites de cette architecture}
 
-Cette architecture est adaptée pour le développement rapide d'un prototype fonctionnel, elle permet une gestion centralisée des documents et les nombreuses librairies disponibles permettent de gérer de façon fiable les connexions client-serveur. Cependant cette architecture rencontre des problèmes de passage à l'échelle. En effet, le serveur devant gérer l'ensemble des documents et toutes les communications avec les clients peut se retrouver rapidement débordé si le nombre de documents et/ou de collaborateurs venait à augmenter. Une solution pourrait être d'augmenter les moyens matériels, à savoir la puissance des serveurs, cependant cette solution est relativement couteuse et par conséquent non viable sur le long terme.
+Cette architecture est adaptée pour le développement rapide d'un prototype fonctionnel, elle permet une gestion centralisée des documents et les nombreuses librairies disponibles permettent de gérer de façon fiable les connexions client-serveur. Cependant cette architecture rencontre des problèmes de passage à l'échelle. En effet, le serveur devant gérer l'ensemble des documents et toutes les communications avec les clients peut se retrouver rapidement débordé si le nombre de documents et/ou de collaborateurs venait à augmenter. Une solution pourrait être d'augmenter les moyens matériels, à savoir la puissance des serveurs, cependant cette solution est relativement couteuse et non viable sur le long terme.
 
 Il est alors nécessaire de s'affranchir de cette architecture centralisée du moins pour les échanges d'opérations texte, de façon à soulager le serveur. Une solution est donc de créer des connexions directes entre les clients. Une technologie nommée webRTC permet de créer des connexions pair-à-pair entre clients par le biais d'un navigateur web. Cette solution a été retenue pour répondre au problème de scalabilité du système.
 
@@ -250,8 +250,75 @@ Il est alors nécessaire de s'affranchir de cette architecture centralisée du m
 
 % Ceci est une référence bibliographique~\cite{GOT4}.
 
-\section{Présentation des technologies webrtc}
-WebRTC pour \emph{Real Time Communication} est un standard de communication élaboré par le w3c \footnote{rfc de webRTC : http://www.w3.org/TR/webrtc/}. Ce standard encore à l'étude aujourd'hui a été inité en mai 2011 et a pour principal objectif de connecter ...
+\section{Présentation des technologies webRTC}
+WebRTC pour \emph{Real Time Communication} est un standard de communication élaboré par le w3c \footnote{RFC de webRTC : \url{http://www.w3.org/TR/webrtc/}}. Ce standard encore à l'étude aujourd'hui a été initié en mai 2011 et a pour principal objectif de permettre la communication en temps réel de différents médias\footnote{À savoir : vidéo, audio et tout autre type de données}. WebRTC doit donc permettre d'établir une connexion pair-à-pair entre deux clients web, mais doit également permettre la gestion des flux de données. 
+
+Pour ce faire, webRTC implémente trois APIs JavaScript :
+\begin{itemize}
+  \item MediaStream : En charge de synchroniser les flux de données pouvant par exemple provenir de la webcam ou du micro de l'ordinateur
+  \item RTCPeerConnection : En charge de gérer la bande passante et le chiffrement des données
+  \item RTCDataChannel : En charge de gérer la connexion pair-à-pair entre deux clients\\
+\end{itemize}
+
+Tous les navigateurs n'implémentent pas encore ces APIs, la technologie webRTC est principalement disponible sur les dernières versions de :
+\begin{itemize}
+  \item Mozilla Firefox
+  \item Google Chrome
+  \item Opera
+  \item Android Browser et Chrome for Android\\
+\end{itemize}
+
+En somme, grâce à ces APIs, il est possible d'utiliser les flux de données provenant de la webcam ou du micro et de le diffuser via une connexion pair-à-pair à d'autres clients. Cette technologie a permis le développement de nombreuses applications de messagerie instantanée et de visioconférence. Le dernier exemple connu se nomme Firefox Hello\footnote{Pour plus d'information : \url{https://www.mozilla.org/fr/firefox/hello/}}.
+
+\subsection{Les mécanismes réseau utilisés}
+
+Outre la gestion des flux de média, certains mécanismes ont été introduits au niveau du réseau permettant l'établissement d'une connexion pair-à-pair entre deux clients distants, ainsi que la résolution de certaines difficultés induites par les pare-feu\footnote{Ou firewall en anglais} et par les NAT\footnote{Signifiant : Network Address Translation}.
+
+\subsubsection{Serveur de signaling}
+
+Une des premières difficultés à laquelle il est nécessaire de répondre est l'établissement d'une connexion pair à paire entre deux clients distants. Il est en effet nécessaire d'avoir un mécanisme de contrôle permettant d'initialiser la connexion, d'échanger les IPs et les ports applicatifs de chaque machine et d'assurer que les deux clients soient bien compatibles. Un serveur de signaling se charge donc de l'échange de ces différents messages de contrôle. 
+
+Ainsi, quand un client souhaite entamer une connexion pair-à-pair avec un autre client, il va tout d'abord contacter le serveur de signaling. Une fois le second client disposé à recevoir la demande, le serveur va la lui transmettre. Une succession d'échange va alors s'effectuer pour que la connexion pair-à-pair puisse s'effectuer correctement. 
+
+Trois types d'information sont échangés par l'intermédiaire du serveur de signaling :
+\begin{itemize}
+    \item Des messages de contrôle, pour l'initialisation de la connexion et la gestion des erreurs
+    \item Des messages liés à la configuration du réseau\footnote{Adressage IP et numéro de port}
+    \item Des messages liés à la compatibilité des médias\footnote{Codecs vidéo et résolution}\\
+\end{itemize}
+
+Une fois ces différentes informations échangées et la compatibilité assurée, la connexion pair-à-pair peut être établie comme le montre la Figure~\ref{fig:signaling}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=10cm]{figures/signaling}
+  \caption{Mécanisme de "signaling" pour l'initialisation d'une connexion pair-à-pair \emph{(inspiré de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
+  \label{fig:signaling}
+\end{figure}
+
+Il est important de préciser que pour des raisons de compatibilités le serveur de signaling ne fait pas l'objet de spécification dans le standard webRTC. Les développeurs ne sont donc pas contraints ni dans le choix d'un protocole de communication ni dans le choix d'une technologie pour la communication client/serveur.
+
+\subsubsection{Serveur TURN et STUN}
+
+Pour créer une connexion pair-à-pair, il est également nécessaire d'obtenir une adresse IP publique et un numéro de port sur lequel se connecter. De nombreux éléments intermédiaires comme les NAT peuvent empêcher l'obtention de ces informations. Pour pallier à ce problème webRTC spécifie l'utilisation de serveurs STUN\footnote{Pour : Simple Traversal of UDP through NATs} utilisant le protocole ICE\footnote{Pour : Interactive Connectivity Establishement}. Ce protocole\footnote{RFC de ICE : \url{https://tools.ietf.org/html/rfc5245}} permet donc de répurérer une adresse IP publique et un numéro de port même en cas de présence de NAT.
+
+La Figure~\ref{fig:stun} représente de cette manière la place des serveurs STUN dans le contexte d'une connexion pair-à-pair. Le nuage aux contours bleus représente le serveur de signaling qui se charge de l'échange des messages de contrôle (notamment des adresses publiques), tandis que les serveurs STUN attribuent à chaque client une adresse IP publique est un numéro de port.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=14cm]{figures/stun}
+  \caption{Fonctionnement d'un serveur STUN \emph{(figure issue de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
+  \label{fig:stun}
+\end{figure}
+
+Le problème d'attribution d'adresses publiques étant résolu, les pairs vont alors tenter de s'interconnecter directement. La présence d'un serveur proxy ou d'un par feu peut cependant poser problème et empêcher l'établissement de la connexion. Dans ce cas-là l'information doit transiter par un serveur TURN\footnote{Pour : Traversal Using Relays around NAT}. La Figure~\ref{fig:turn} représente la place occupée par un serveur TURN dans le contexte d'une connexion pair-à-pair où la présence d'un pare-feu ou d'un serveur proxy bloquerait l'établissement de cette dernière. Les serveurs TURN jouent alors le rôle de relais.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=14cm]{figures/turn}
+  \caption{Fonctionnement d'un serveur TURN \emph{(figure issue de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
+  \label{fig:turn}
+\end{figure}
 
 \cleardoublepage
 
@@ -280,6 +347,8 @@ WebRTC pour \emph{Real Time Communication} est un standard de communication éla
 \cleardoublepage
 
 \renewcommand{\tocbibname}{Bibliographie / Webographie}
+
+\nocite{*}
 \bibliography{example} % See example.bib 
 \bibliographystyle{plain}
 
