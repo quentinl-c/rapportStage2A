@@ -55,14 +55,6 @@ for this night and all the nights to come.''
 }
 
 \hspace{4cm} -- The Night's Watch oath
-
-
-\cleardoublepage
-
-\section*{Avant-propos (optionnel)}
-\addcontentsline{toc}{chapter}{Avant-propos (optionnel)}
-
-
 \cleardoublepage
 
 \renewcommand{\baselinestretch}{0.5}\normalsize
@@ -82,9 +74,7 @@ l'information. Une dimension collaborative sous forme de blog, wiki, réseaux so
 La multiplication des périphériques connectés tels que les tablettes et les smartphones a permis de démocratiser l'accès au web. 
 Les applications "Desktops" principalement utilisées sur les ordinateurs n'étaient alors plus suffisantes pour répondre aux contraintes
 d'un environnement numérique pluriel. Le partage des différents contenus multimédia avec tous ces appareils se révélait être une 
-nécessité.L'augmentation de la puissance des serveurs hébergeant ces applications web 2.0 a permis progressivement l'apparition 
-d'applications plus complexes étant susceptibles de remplacer ces applications "Desktops". De nouvelles suites bureautiques online ont alors 
-vu le jour, s'inspirant des applications "Desktops" et y incorporant la dimension collaborative inspirée par le web 2.0. 
+nécessité.L'augmentation de la puissance des serveurs hébergeant ces applications web 2.0 et le développement de nouvelles technologies côté client, ont permis progressivement l'apparition d'applications plus complexes étant susceptibles de remplacer ces applications "Desktops". De nouvelles suites bureautiques online ont alors vu le jour, s'inspirant des applications "Desktops" et y incorporant la dimension collaborative inspirée par le web 2.0. 
 
 L'exemple le plus marquant étant bien évidemment celui de Google qui propose une suite d'applications : Google Docs, Google Sheets, 
 Google Slides et Google Forms. Toutes ces applications permettent de travailler en collaboration avec plusieurs acteurs sur un même 
@@ -165,7 +155,7 @@ Le travail de l'équipe s'organise plus particulièrement autour de trois axes d
   \item Interopérabilité et modélisation d'entreprise
 \end{itemize}
 
-Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des systèmes collaboratifs distribués. J'ai travaillé sous la tutelle de Gerald OSTER, enseignant chercheur au LORIA et à TELECOM Nancy. Ses recherches portent sur la réplication optimiste et consistante dans les environnements distribués collaboratifs. Par ailleurs, j'ai travaillé en collaboration avec Mathieu NICOLAS, ingénieur de recherche dans l'équipe VERIDIS, qui a développé l'éditeur collaboratif sur lequel j'ai été amené à travailler.  
+Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des systèmes collaboratifs distribués. J'ai travaillé sous la tutelle de Gerald OSTER, enseignant chercheur au LORIA et à TELECOM Nancy. Ses recherches portent sur la réplication optimiste et cohérente dans les environnements distribués collaboratifs. Par ailleurs, j'ai travaillé en collaboration avec Mathieu NICOLAS, ingénieur de recherche dans l'équipe VERIDIS, qui a développé l'éditeur collaboratif sur lequel j'ai été amené à travailler.  
 
 \cleardoublepage
 
@@ -174,11 +164,11 @@ Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des
 
 \section{Présentation de MUTE}
 
-L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
+L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte\footnote{}. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
 
 L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Doc. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
 
-Une seconde approche plus appropriée consiste à décomposer le document en ensembles atomiques. L'algorithme permet uniquement l'insertion ou la suppression d'un élément et l'unicité de tous les éléments permet de résoudre les conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
+Une seconde approche plus appropriée consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'odre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
 
 \begin{figure}[!h]
   \centering
@@ -190,7 +180,7 @@ Une seconde approche plus appropriée consiste à décomposer le document en ens
 
 \subsection{Architecture et fonctionnement de MUTE}
 
-L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une webSocket. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
+L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une webSocket\footnote{Connection client/serveur persistante}. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
 
 \begin{figure}[!h]
   \centering
@@ -297,9 +287,9 @@ Une fois ces différentes informations échangées et la compatibilité assurée
   \label{fig:signaling}
 \end{figure}
 
-Il est important de préciser que pour des raisons de compatibilités le serveur de signaling ne fait pas l'objet de spécification dans le standard webRTC. Les développeurs ne sont donc pas contraints ni dans le choix d'un protocole de communication ni dans le choix d'une technologie pour la communication client/serveur.
+Il est important de préciser que le serveur de signaling ne fait pas l'objet de spécification dans le standard webRTC. Les développeurs ne sont donc pas contraints ni dans le choix d'un protocole de communication ni dans le choix d'une technologie pour la communication client/serveur.
 
-\subsubsection{Serveur TURN et STUN}
+\subsubsection{Serveur STUN et TURN}
 
 Pour créer une connexion pair-à-pair, il est également nécessaire d'obtenir une adresse IP publique et un numéro de port sur lequel se connecter. De nombreux éléments intermédiaires comme les NAT peuvent empêcher l'obtention de ces informations. Pour pallier à ce problème webRTC spécifie l'utilisation de serveurs STUN\footnote{Pour : Simple Traversal of UDP through NATs} utilisant le protocole ICE\footnote{Pour : Interactive Connectivity Establishement}. Ce protocole\footnote{RFC de ICE : \url{https://tools.ietf.org/html/rfc5245}} permet donc de répurérer une adresse IP publique et un numéro de port même en cas de présence de NAT.
 
@@ -321,11 +311,29 @@ Le problème d'attribution d'adresses publiques étant résolu, les pairs vont a
   \label{fig:turn}
 \end{figure}
 
+Ces différents mécanismes permettent de répondre aux contraintes imposées par internet et garantissent l'établissement d'une connexion RTC. 
+
 \cleardoublepage
 
 \chapter{Présentation du travail réalisée}
 
+J'ai pour mission d'intégrer un module de communication pair-à-pair dans l'application MUTE. Mon travail consiste donc à comprendre et appréhender l'architecture de MUTE, d'étudier et de choisir la librairie la plus adaptée pour utiliser la technologie webRTC et enfin de développer un module de communication pair-à-pair opérationnel.
+
 \section{Présentation du contexte et de la problématique détaillée}
+
+MUTE est une application développée en JavaScript, l'application côté serveur a été développée en NodeJS, l'application côté client utilise certains modules NodeJS, mais également des librairies JavaScript externes\footnote{JQuey, Ace-editor , etc.}.
+
+\subsection{Contraintes et objectifs}
+Le module de communication pair-à-pair sera intégré au même niveau que le module de communication client/serveur\footnote{Socket-io-adapter}. Les fonctionnalités initialement proposées seront conservées et l'utilisateur pourra choisir ou non d'utiliser la communication pair-à-pair. L'objectif n'est donc pas de modifier l'existant, mais d'adapter le module de communication pair-à-pair aux mécanismes déjà utilisés. Dans le cas où des modifications venaient à être effectuées sur les modules existants, elles ne devraient en rien  altérer le comportement des fonctionnalités existantes.
+
+L'objectif est d'aboutir à une topologie identique à celle décrite à la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les pairs sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs de chaque document.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=12cm]{figures/topo-webRTC}
+  \caption{Topologie du réseau pour un document avec quatre contributeurs}
+  \label{fig:topo-webRTC}
+\end{figure}
 
 \section{Réalisation d'un système de communication pair-à-pair pour l'outil MUTE}
 
