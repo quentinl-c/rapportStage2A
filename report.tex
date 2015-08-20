@@ -298,7 +298,7 @@ La Figure~\ref{fig:stun} représente de cette manière la place des serveurs STU
 \begin{figure}[!h]
   \centering
   \includegraphics[width=14cm]{figures/stun}
-  \caption{Fonctionnement d'un serveur STUN \emph{(figure issue de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
+  \caption{Etablissement d'une connexion avec un serveur STUN \emph{(figure issue de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
   \label{fig:stun}
 \end{figure}
 
@@ -323,21 +323,42 @@ J'ai pour mission d'intégrer un module de communication pair-à-pair dans l'app
 
 MUTE est une application développée en JavaScript, l'application côté serveur a été développée en NodeJS, l'application côté client utilise certains modules NodeJS, mais également des librairies JavaScript externes\footnote{JQuey, Ace-editor , etc.}.
 
-\subsection{Contraintes et objectifs}
 Le module de communication pair-à-pair sera intégré au même niveau que le module de communication client/serveur\footnote{Socket-io-adapter}. Les fonctionnalités initialement proposées seront conservées et l'utilisateur pourra choisir ou non d'utiliser la communication pair-à-pair. L'objectif n'est donc pas de modifier l'existant, mais d'adapter le module de communication pair-à-pair aux mécanismes déjà utilisés. Dans le cas où des modifications venaient à être effectuées sur les modules existants, elles ne devraient en rien  altérer le comportement des fonctionnalités existantes.
 
-L'objectif est d'aboutir à une topologie identique à celle décrite à la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les pairs sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs de chaque document.
+L'objectif est d'aboutir à une topologie identique à celle décrite à la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les contributeur sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs et ce pour chaque document.
 
 \begin{figure}[!h]
   \centering
-  \includegraphics[width=12cm]{figures/topo-webRTC}
+  \includegraphics[width=11cm]{figures/topo-webRTC}
   \caption{Topologie du réseau pour un document avec quatre contributeurs}
   \label{fig:topo-webRTC}
 \end{figure}
 
 \section{Réalisation d'un système de communication pair-à-pair pour l'outil MUTE}
 
+La réalisation du système de communication pair-à-pair se décompose en deux étapes :
+
+\begin{enumerate}
+  \item Étude, recherche et validation d'une librairie exploitant la technologie webRTC
+  \item Développement du module de communication paire à pair
+\end{enumerate}
+
+À la suite de cela l'ensemble des fonctionnalités proposées par MUTE ont été testées et validées. 
+
 \subsection{Choix de la librairie et développement d'un prototype}
+
+Le choix de librairie est crucial pour la suite du développement, elle doit être en mesure de répondre aux contraintes imposées par le projet. Dans le cadre du projet, il est question de développer un prototype fonctionnel, maintenable et évolutif. 
+
+La librairie doit donc respecter certaines contraintes, à savoir :
+
+\begin{itemize}
+  \item Offrir un niveau d'abstraction suffisant
+  \item Proposer un support et une communauté de développeurs active\footnote{Concernant la correction des bugs et l'ajout de nouvelles fonctionnalités}
+  \item Proposer une documentation claire et complète sur l'utilisation de son API
+\end{itemize}
+
+De cette manière, un niveau d'abstraction suffisant permet de concentrer le développement autour de la réalisation du module et non sur des mécanismes plus «bas-niveau». Une communauté active permet quant à elle de proposer un support et une aide sur les bugs et les problèmes rencontrés. Enfin, une documentation claire et concise permet d'appréhender plus facilement et plus rapidement la librairie.
+
 
 \subsection{Implémentation du système pair-à-pair dans MUTE}
 
