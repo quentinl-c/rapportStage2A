@@ -1,9 +1,6 @@
 #TODO : Rapport de satge
 
-* première page: changer INRIA avec Loria
-* modifier entreprise par labo
-* webRTC
-* équipe Veridis
+* Corriger la biblio 
 
 ##Biblio :
 * http://www.journaldunet.com/solutions/0601/060105_tribune-sqli-web-20.shtml

@@ -14,7 +14,7 @@
 \def\reportIndustrialSupervisor{Oster Gerald} % Prénom Nom de l'encadrant industriel
 \def\reportAcademicSupervisor{Badonnel Rémi} % Prénom Nom de l'encadrant académique
 
-\def\reportCompany{INRIA - équipe COAST} % Nom de l'entreprise d'accueil
+\def\reportCompany{LORIA - équipe COAST} % Nom de l'entreprise d'accueil
 \def\reportCompanyAddress{615 rue du Jardin botanique}  % Adresse de l'entreprise
 \def\reportCompanyCity{54600 Villers-lès-Nancy} % Adresse (cont.) de l'entreprise
 \def\reportCompanyPhone{+33 (0)3 83 58 17 50} % Téléphone de l'entreprise
@@ -116,8 +116,8 @@ problématique est de développer un réseau pair-à-pair entre tous les clients
 par le serveur, mais seraient directement émises d'un client vers les autres clients. Cette communication directe entre chaque client 
 permet de conserver des performances correctes même en cas de montée en charge. 
 
-J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE\footnote{Pour : Multi-User Text Editor, l'acronyme MUTE sera utilisé tout au long du rapport}, de façon à y incorporer un mécanisme d'échange pair-à-pair. Je dois pour cela utiliser la technologie web-rtc, qui permet d'établir des connexions pair-à-pair entre deux clients par le biais du navigateur web. Mon travail consiste donc à choisir les outils de développement les 
-plus adaptés pour utiliser la technologie web-rtc et de développer un module de communication pair-à-pair pour l'application MUTE. 
+J'ai ainsi pour mission d'adapter un éditeur de texte collaboratif nommé MUTE\footnote{Pour : Multi-User Text Editor, l'acronyme MUTE sera utilisé tout au long du rapport}, de façon à y incorporer un mécanisme d'échange pair-à-pair. Je dois pour cela utiliser la technologie webRTC, qui permet d'établir des connexions pair-à-pair entre deux clients par le biais du navigateur web. Mon travail consiste donc à choisir les outils de développement les 
+plus adaptés pour utiliser la technologie webRTC et de développer un module de communication pair-à-pair pour l'application MUTE. 
 
 
 \cleardoublepage
@@ -165,7 +165,7 @@ Le travail de l'équipe s'organise plus particulièrement autour de trois axes d
   \item Interopérabilité et modélisation d'entreprise
 \end{itemize}
 
-Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des systèmes collaboratifs distribués. J'ai travaillé sous la tutelle de Gerald OSTER, enseignant chercheur au LORIA et à TELECOM Nancy. Ses recherches portent sur la réplication optimiste et consistante dans les environnements distribués collaboratifs. Par ailleurs, j'ai travaillé en collaboration avec Mathieu NICOLAS, ingénieur de recherche dans l'équipe ***, qui a développé l'éditeur collaboratif sur lequel j'ai été amené à travailler.  
+Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des systèmes collaboratifs distribués. J'ai travaillé sous la tutelle de Gerald OSTER, enseignant chercheur au LORIA et à TELECOM Nancy. Ses recherches portent sur la réplication optimiste et consistante dans les environnements distribués collaboratifs. Par ailleurs, j'ai travaillé en collaboration avec Mathieu NICOLAS, ingénieur de recherche dans l'équipe VERIDIS, qui a développé l'éditeur collaboratif sur lequel j'ai été amené à travailler.  
 
 \cleardoublepage
 
@@ -190,7 +190,7 @@ Une seconde approche plus appropriée consiste à décomposer le document en ens
 
 \subsection{Architecture et fonctionnement de MUTE}
 
-L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une web-socket. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
+L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une webSocket. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
 
 \begin{figure}[!h]
   \centering
@@ -205,17 +205,17 @@ L'application MUTE adopte initialement une architecture client/serveur. Tous les
 Le client est composé de quatre modules :
 
 \begin{itemize}
-    \item Ace-editor : librairie utilisée pour créer l'éditeur de texte qui apparait à l'écran du client
+    \item Ace-editor\footnote{Pour plus d'information : \url{http://ace.c9.io/}} : librairie utilisée pour créer l'éditeur de texte qui apparait à l'écran du client
     \item InfoUser : module permettant de gérer les informations de l'utilisateur et des autres contributeurs
     \item Coordinator : module permettant de gérer le modèle \footnote{Sous la forme de structures LogootSplit} et utilisant l'algorithme LogootSplit pour l'application des opérations texte
     \item Socket-io-adapter : module en charge de la communication avec le serveur
 \end{itemize}
 
 L'organisation de ces modules est décrite dans la Figure~\ref{fig:mute-archi} 
-Chaque collaborateur est identifié de manière unique grâce à un \emph{numéro de site} donné par le serveur. 
+Chaque collaborateur est identifié de manière unique grâce à un \emph{numéro de site} attribué par le serveur. 
 
 \subsubsection{Architecture du serveur}
-L'architecture du serveur est semblable à celle du client, à la différence qu'elle n'utilise pas Ace-editor.
+L'architecture du serveur décrite par la Figure~\ref{fig:mute-archi} est semblable à celle du client, à la différence qu'elle n'utilise pas Ace-editor.
 Elle se compose donc de trois modules :
 
 \begin{itemize}
@@ -224,11 +224,12 @@ Elle se compose donc de trois modules :
   \item Socket-io-adapter : module en charge de la communication avec les clients
 \end{itemize}
 
+
 \subsubsection{Fonctionnement de MUTE}
 
 La Figure~\ref{fig:mute-archi} représente le fonctionnement de l'architecture MUTE. Deux clients et le serveur y sont représentés, un client est en train de rédiger, pendant que le second visualise les modifications. Le cheminement des données est représenté par des flèches et chaque étape est décrite dans les encadrés bleus.
 
-Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opérations texte qui vont être transmises au coordinateur\footnote{ou coordinator en anglais}. Le coordinateur va en suite générer les opérations Logoot pour les opérateurs distants\footnote{Les opérateurs distants correspondent aux autres clients et au serveur} et va transmettre ces opérations au module socket-io-adapter. Les opérations vont être ainsi transmises au serveur.
+Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opérations texte qui vont être transmises au coordinateur\footnote{Ou coordinator en anglais}. Le coordinateur va en suite générer les opérations Logoot pour les opérateurs distants\footnote{Les opérateurs distants correspondent aux autres clients et au serveur} et va transmettre ces opérations au module socket-io-adapter. Les opérations vont être ainsi transmises au serveur.
 
 À la réception des opérations Logoot par le serveur, ce dernier va transmettre ces opérations à son coordinateur et dans le même temps, les enverra aux autres contributeurs du document. Le coordinateur du serveur va appliquer les opérations Logoot de façon à conserver une copie à jour du document. Les autres contributeurs vont faire de même et vont répercuter les modifications sur leur modèle local. Une fois les opérations appliquées, la vue de l'éditeur va se mettre à jour pour que les autres utilisateurs puissent visualiser les modifications.
 
@@ -251,9 +252,9 @@ Il est alors nécessaire de s'affranchir de cette architecture centralisée du m
 % Ceci est une référence bibliographique~\cite{GOT4}.
 
 \section{Présentation des technologies webRTC}
-WebRTC pour \emph{Real Time Communication} est un standard de communication élaboré par le w3c \footnote{RFC de webRTC : \url{http://www.w3.org/TR/webrtc/}}. Ce standard encore à l'étude aujourd'hui a été initié en mai 2011 et a pour principal objectif de permettre la communication en temps réel de différents médias\footnote{À savoir : vidéo, audio et tout autre type de données}. WebRTC doit donc permettre d'établir une connexion pair-à-pair entre deux clients web, mais doit également permettre la gestion des flux de données. 
+WebRTC pour \emph{Real Time Communication} est un standard de communication élaboré par le W3C \footnote{RFC de webRTC : \url{http://www.w3.org/TR/webrtc/}}. Ce standard encore à l'étude aujourd'hui a été initié en mai 2011 et a pour principal objectif de permettre la communication en temps réel de différents médias\footnote{À savoir : vidéo, audio et tout autre type de données}. WebRTC doit donc permettre d'établir une connexion pair-à-pair entre deux clients web, mais doit également permettre la gestion des flux de données. 
 
-Pour ce faire, webRTC implémente trois APIs JavaScript :
+Pour ce faire, webRTC propose l'implémentation de trois APIs JavaScript :
 \begin{itemize}
   \item MediaStream : En charge de synchroniser les flux de données pouvant par exemple provenir de la webcam ou du micro de l'ordinateur
   \item RTCPeerConnection : En charge de gérer la bande passante et le chiffrement des données

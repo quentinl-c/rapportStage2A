@@ -29,6 +29,8 @@ Introduction
 
 ####1.Présentation de MUTE
 * Avantage de l'approche CRDT par rapport à l'approche OT (présentation rapide de ses deux approches)
+
+#####1. Architecture de MUTE
 * Présentation de l'architecture de MUTE
 * Présentation des limites d'un tel système 
 

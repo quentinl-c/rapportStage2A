@@ -131,7 +131,7 @@
 
 \ifbool{pidr}
   {\reportProjectCustomer{}}
-  {Stage de deuxième année réalisé dans l'entreprise \reportCompany{}
+  {Stage de deuxième année réalisé dans le laboratoire \reportCompany{}
 
    en vue du passage en troisième année à \reportSchool{}}
 
@@ -237,7 +237,7 @@
 
 \ifbool{pidr}
   {\reportProjectCustomer{}}
-  {Stage de deuxième année réalisé dans l'entreprise \reportCompany{}
+  {Stage de deuxième année réalisé dans le laboratoire \reportCompany{}
 
    en vue du passage en troisième année à  \reportSchool{}}
 \vfill
