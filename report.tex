@@ -4,7 +4,7 @@
 \def\reportTitle{Conception et réalisation d'une plateforme web d'édition collaborative pair-à-pair } % Titre du mémoire
 \def\reportLongTitle{Conception et réalisation d'une plateforme web d'édition collaborative pair-à-pair temps réel sécurisée} % Titre plus long du mémoire
 
-\def\reportAuthor{Laporte-Chabasse	Quentin}
+\def\reportAuthor{Laporte-Chabasse  Quentin}
 \def\reportAuthorEmail{\email{quentin.laporte-chabasse@telecomnancy.eu}} % Courriel de l'élève
 
 \def\reportAuthorAddress{30 rue Fabert} % Adresse de l'élève
@@ -164,11 +164,11 @@ Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des
 
 \section{Présentation de MUTE}
 
-L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte\footnote{}. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
+L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte\footnote{Une opération texte correspond à l'ajout ou la suppression d'un caractère dans le document}. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
 
 L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Doc. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
 
-Une seconde approche plus appropriée consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'odre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
+Une seconde approche plus appropriée consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'ordre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
 
 \begin{figure}[!h]
   \centering
@@ -180,7 +180,7 @@ Une seconde approche plus appropriée consiste à introduire une nouvelle struct
 
 \subsection{Architecture et fonctionnement de MUTE}
 
-L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une webSocket\footnote{Connection client/serveur persistante}. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
+L'application MUTE adopte initialement une architecture client/serveur. Tous les collaborateurs d'un même document sont connectés à un serveur qui se charge de relayer les différentes opérations texte et de maintenir une copie du document. Chaque client possède une copie du document ainsi que des informations relatives à l'utilisateur, comme son nom et la position de son curseur. Il possède également ces informations pour les autres collaborateurs du document. Tous les clients sont connectés au serveur au travers d'une webSocket\footnote{Connexion client/serveur persistante}. Comme le montre la Figure~\ref{fig:cli-serv}, le serveur est l'élément central de toutes les communications. Il conserve une trace de tous les documents et associe à chaque document les contributeurs de ce dernier et une copie du document. De cette façon, lorsqu'un nouveau client se connecte, ce dernier a la possibilité de récupérer la dernière copie du document en cours d'édition. 
 
 \begin{figure}[!h]
   \centering
@@ -269,7 +269,7 @@ Outre la gestion des flux de média, certains mécanismes ont été introduits a
 
 Une des premières difficultés à laquelle il est nécessaire de répondre est l'établissement d'une connexion pair à paire entre deux clients distants. Il est en effet nécessaire d'avoir un mécanisme de contrôle permettant d'initialiser la connexion, d'échanger les IPs et les ports applicatifs de chaque machine et d'assurer que les deux clients soient bien compatibles. Un serveur de signaling se charge donc de l'échange de ces différents messages de contrôle. 
 
-Ainsi, quand un client souhaite entamer une connexion pair-à-pair avec un autre client, il va tout d'abord contacter le serveur de signaling. Une fois le second client disposé à recevoir la demande, le serveur va la lui transmettre. Une succession d'échange va alors s'effectuer pour que la connexion pair-à-pair puisse s'effectuer correctement. 
+Ainsi, quand un client souhaite entamer une connexion pair-à-pair avec un autre client, il va tout d'abord contacter le serveur de signaling. Une fois le second client disposé à recevoir la demande, le serveur va la lui transmettre. Une succession d'échange va alors s'effectuer pour que la connexion pair-à-pair puisse s'établir correctement. 
 
 Trois types d'information sont échangés par l'intermédiaire du serveur de signaling :
 \begin{itemize}
@@ -298,7 +298,7 @@ La Figure~\ref{fig:stun} représente de cette manière la place des serveurs STU
 \begin{figure}[!h]
   \centering
   \includegraphics[width=14cm]{figures/stun}
-  \caption{Etablissement d'une connexion avec un serveur STUN \emph{(figure issue de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
+  \caption{Établissement d'une connexion avec un serveur STUN \emph{(figure issue de la référence bibliographique~\cite{GettingStartedwithWebRTC})}}
   \label{fig:stun}
 \end{figure}
 
@@ -325,7 +325,7 @@ MUTE est une application développée en JavaScript, l'application côté serveu
 
 Le module de communication pair-à-pair sera intégré au même niveau que le module de communication client/serveur\footnote{Socket-io-adapter}. Les fonctionnalités initialement proposées seront conservées et l'utilisateur pourra choisir ou non d'utiliser la communication pair-à-pair. L'objectif n'est donc pas de modifier l'existant, mais d'adapter le module de communication pair-à-pair aux mécanismes déjà utilisés. Dans le cas où des modifications venaient à être effectuées sur les modules existants, elles ne devraient en rien  altérer le comportement des fonctionnalités existantes.
 
-L'objectif est d'aboutir à une topologie identique à celle décrite à la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les contributeur sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs et ce pour chaque document.
+L'objectif est d'aboutir à une topologie identique à celle décrite à la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les contributeurs sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs, et ce pour chaque document.
 
 \begin{figure}[!h]
   \centering
@@ -359,12 +359,121 @@ La librairie doit donc respecter certaines contraintes, à savoir :
 
 De cette manière, un niveau d'abstraction suffisant permet de concentrer le développement autour de la réalisation du module et non sur des mécanismes plus «bas-niveau». Une communauté active permet quant à elle de proposer un support et une aide sur les bugs et les problèmes rencontrés. Enfin, une documentation claire et concise permet d'appréhender plus facilement et plus rapidement la librairie.
 
+Mes recherches ont retenu quatre librairies exploitant la technologie webRTC :
+
+\begin{itemize}
+  \item SimpleWebRTC\footnote{Pour plus d'information : \url{https://simplewebrtc.com/}}
+  \item y-webrtc\footnote{Pour plus d'information : \url{https://github.com/y-js/y-webrtc}}
+  \item rtc-scamp\footnote{Pour plus d'information : \url{https://github.com/Chat-Wane/rtc-SCAMP}}
+  \item PeerJS\footnote{Pour plus d'information : \url{http://peerjs.com/}}
+\end{itemize}
+
+En m'appuyant sur la documentation de l'API, l'activité des dépôts et le nombre de tickets encore ouverts, j'ai pu établir un comparatif. Ce dernier décrit par la Figure~\ref{fig:comp-lib} m'a ainsi permis de sélectionner la librairie qui à mon sens était la plus adaptée. La librairie PeerJS m'a donc semblé être un choix judicieux, répondant aux besoins du projet. C'est la seule librairie qui offre en plus de son API, la possibilité d'utiliser un serveur de signaling distant. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=11cm]{figures/comparatif-lib}
+  \caption{Comparatif des librairies étudiées}
+  \label{fig:comp-lib}
+\end{figure}
+
+Le fonctionnement de l'API est relativement simple. Chaque client se voit attribuer par le serveur de signaling un identifiant unique, nommé peerId. Ainsi, si un client prend connaissance du peerId d'un autre pair, il pourra entamer une connexion avec lui. Ce peerId est donc un moyen d'identifier de manière unique les pairs, mais également de se connecter avec un pair distant. L'API est en JavaScript et repose donc sur de la programmation événementielle. Il est ainsi possible d'intercepter des évènements comme l'ouverture ou la fermeture d'une connexion et la réception de données.  
+
+
+Avant d'entamer le développement du module, j'ai voulu valider mon choix en développant un prototype simple. J'ai donc développé une application NodeJS où chaque client envoie à intervalle de temps réguliers des messages aux autres pairs\footnote{Un client et un pair correspondent à la même notion, à savoir : une page web ouverte dans un navigateur} avec qui, il est connecté. Les messages contiennent le peerId du pair émetteur, l'heure d'envoi et le numéro du message. La Figure~\ref{fig:proto-peerjs} représente l'interface du client, cette dernière permet de visualiser le peerId du client, la liste des messages reçus et la liste des autres pairs avec qui le client est connecté.
+
+Ce prototype m'a permis de tester et d'utiliser les fonctionnalités d'envoi et de réception des messages. J'ai également pu m'assurer que l'échange des messages respectait une certaine forme de causalité, l'ordre d'arrivée étant similaire à l'ordre d'émission. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=15cm]{figures/proto-peerjs}
+  \caption{Interface du prototype}
+  \label{fig:proto-peerjs}
+\end{figure}
 
 \subsection{Implémentation du système pair-à-pair dans MUTE}
 
+Après avoir sélectionné la librairie, je me suis attelé au développement du module pour l'application MUTE. J'ai ainsi mené une réflexion sur les responsabilités respectives du client et du serveur et sur les mécanismes de gestion des contributeurs (ajout/suppression d'un contributeur, gestion des messages, etc.)
+
+\subsubsection{Définition des responsabilités du client et du serveur}
+J'ai donc énuméré les responsabilités respectives du client et du serveur.
+
+Le serveur doit être en mesure de :
+\begin{itemize}
+  \item conserver et maintenir une liste des documents créés
+  \item conserver et maintenir une liste à jour des contributeurs pour chaque document\footnote{Ce qui implique l'ajout ou la suppression d'un contributeur qui se connecte ou se déconnecte}
+  \item fournir la liste des contributeurs à un client souhaitant rejoindre le document.\\
+\end{itemize}
+
+Le client doit être en mesure de :
+\begin{itemize}
+  \item contacter le serveur au moment de l'initialisation
+  \item initialiser, établir et maintenir les connexions pair-à-pair
+  \item gérer les ouvertures et fermetures de connexion pair-à-pair distantes
+  \item gérer l'émission et la réception de messages
+  \item conserver et maintenir une liste à jour des contributeurs pour chaque document
+  \item conserver le dernier état connu du document\footnote{Cette fonctionnalité a déjà été implémentée, tous les clients maintiennent une base de données locale}\\
+\end{itemize}
+
+Le client et le serveur doivent être en mesure de maintenir une connexion persistante sous la forme d'une webSocket.
+
+Comme le montre la Figure~\ref{fig:archi-p2p}, deux modules vont ainsi être implémentés, un côté serveur et l'autre côté client.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=10cm]{figures/archi-p2p}
+  \caption{Comparatif des librairies étudiées}
+  \label{fig:archi-p2p}
+\end{figure}
+
+Il est important de remarquer que même si le module côté serveur porte le nom de "Peer-io-adapter", ce dernier n'utilisera pas la technologie webRTC et n'instanciera jamais de connexion pair-à-pair. Le serveur se charge de maintenir une liste des collaborateurs à jour, et ce pour chaque document. 
+
+\subsubsection{Mécanismes implémentés}
+
+Le premier mécanisme implémenté et celui de l'ajout d'un contributeur. La Figure~\ref{fig:inscription} explicite les différentes phases par lesquelles le client doit passer pour rejoindre un document. Ainsi, quand un nouveau client tente de rejoindre à un document, il va tout d'abord contacter le serveur et lui donner son peerId. le serveur va en retour l'ajouter à la liste des contributeurs, lister l'ensemble des contributeurs actuellement présent et lui renvoyer cette liste accompagnée du numéro de site. Le client va donc créer une connexion\footnote{Implicitement, une connexion pair-à-pair} vers chacun de ces pairs. Une fois toutes ces connexions établies, le client peut communiquer directement avec tous les contributeurs du projet. Le client va demander une copie du document au premier pair de la liste que le serveur lui aura communiquée.
+
+Si c'est le client est le premier à rejoindre le document et que le document n'a pas encore était créé, le serveur instanciera alors la structure de données qui permettra de conserver la liste de contributeurs et ajoutera le client à cette liste. Dans le cas où le document est déjà créé, le serveur se chargera uniquement d'ajouter ce client à la liste des collaborateurs du document. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=15cm]{figures/inscription}
+  \caption{Inscription d'un contributeur}
+  \label{fig:inscription}
+\end{figure}
+
+Les messages envoyés à travers la connexion pair-à-pair sont formatés en JSON, ils sont convertis en chaîne de caractères à l'émission et parser à la réception. Ils comportent deux attributs: event et data. L'attribut event correspond au contexte du message, tandis que data correspond à la donnée envoyée. J'ai dû établir une liste des différents contextes pouvant se présenter de façon à adapter le comportement du client en fonction du type de message reçu. Ainsi, à la réception d'un message, le client est en mesure de savoir s'il s'agit de l'émission d'une opération texte, d'information sur l'utilisateur ou d'autres demandes particulières. Une liste exhaustive de ces contextes est disponible en Annexe~\ref{sec:context}.
+
+Dans une majorité de cas, les messages sont envoyés à tous les pairs, seuls quelques messages comme la demande d'une copie du document ou la demande d'informations sur un utilisateur sont destinés à un client particulier. Quand un utilisateur génère des opérations texte, il va ainsi les envoyer à tous les clients de sa liste.
+
+Quand un client quitte le document, les connexions pair-à-pair avec les autres collaborateurs vont se fermer et la websocket partagée avec le serveur, va elle aussi se fermer. À la fermeture de la webSocket, le serveur va retirer le contributeur de la liste des collaborateurs et sur le même principe, tous les clients vont retirer le contributeur de leur liste au moment où la connexion pair-à-pair se rompt. 
+
+La Figure~\ref{fig:mute-archi-p2p} représente ainsi la nouvelle architecture et le mécanisme d'échange d'opérations texte, dans le même contexte que celui présenté par la Figure~\ref{fig:mute-archi}. Il est important de remarquer que le serveur n'a plus aucun rôle à jouer dans la communication des opérations textes, toutes ses fonctionnalités ont été reprises par le module Peer-io-adapter côté client. Les connexions webSocket sont uniquement maintenues pour que le serveur puisse répercuter la déconnexion d'un pair dans la liste des collaborateurs.
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=17cm]{figures/MUTE-archi-p2p}
+  \caption{Inscription d'un contributeur}
+  \label{fig:mute-archi-p2p}
+\end{figure}
+
+J'ai ainsi développé deux modules implémentant ces mécanismes, un côté serveur permettant de maintenir une liste à jour des collaborateurs, et un autre côté client implémentant le système d'insciprtion et communication avec le serveur et celui d'échange pair-à-pair avec les autres clients. En ce qui concerne le module développé côté serveur, ma réflexion a principalement porté sur la structure de données permettant de conserver la liste des collaborateurs ainsi que sur les processus d'inscription et de déconnexion des collaborateurs. Le travail autour du module côté client s'est concentré autour de l'étude du module existant, à savoir : Socket-io-adapter et de son adaptation pour un schéma pair-à-pair. Je devais en effet adapter le module Peer-io-adapter de façon à ce qu'il respecte les mécanismes de communications existants avec les autres modules.
+
 \subsection{Présentation du résultat}
 
+L'ensemble des fonctionnalités ont été testé et l'expérience utilisateur n'a pas mis en évidence de problème particulier. En effet, les fonctionnalités existantes décrites ci-dessous conservaient leur comportement initial.
+
+Fonctionnalités existantes supportées par le modèle pair-à-pair :
+\begin{itemize}
+  \item Partage des opérations textes avec tous les collaborateurs d'un même document
+  \item Partage de la position du curseur avec tous les collaborateurs d'un même document
+  \item Partage de la sélection d'un utilisateur avec tous les collaborateurs d'un même document
+  \item Partage du nom de l'utilisateur tous les collaborateurs d'un même document\\
+\end{itemize}
+
+Le prototype est totalement fonctionnel et correspond donc aux attentes. Cependant nous avons estimé que la topologie du réseau pair-à-pair n'était pas utilisée de façon suffisamment efficace pour être pleinement "scalable". En effet, dans la topologie résultante tous les pairs d'un même réseau se connaissent et sont tous directement connectés les uns aux autres. Cette topologie rencontre donc certaines limites si le nombre de collaborateurs venait à augmenter. Un des moyens de répondre à cette problématique et d'utiliser un algorithme de gossiping pour la construction du réseau.
+
 \section{Implémentation d'un système de gossiping pour MUTE}
+
 
 \subsection{Présentation des algorithmes de Gossiping}
 
@@ -402,11 +511,32 @@ De cette manière, un niveau d'abstraction suffisant permet de concentrer le dé
 \cleardoublepage
 
 \chapter{Première Annexe}
+
+
 \cleardoublepage
 
 \chapter{Seconde Annexe}
 
+\section{Structure de donnée} % (fold)
+\label{sec:strcuture_de_donn_e}
 
+% section strcuture_de_donn_e (end)
+
+\section{Liste exhaustive des contextes}
+\label{sec:context}
+
+\begin{itemize}
+  \item \emph{sendOps : } envoi d'opérations textes
+  \item \emph{sendDoc : } envoi d'une copie du document
+  \item \emph{queryUserInfo : } demande d'informations sur l'utilisateur
+  \item \emph{addUser : } demande d'ajout d'un utilisateur
+  \item \emph{broadcastCollaboratorCursorAndSelections : } envoi d'informations sur la position du curseur
+  \item \emph{broadcastCollaboratorUsername : } envoi du nom d'un utilisateur
+  \item \emph{joinDoc : } demande d'une copie du document
+\end{itemize}
+
+
+% section section_name (end)
 \cleardoublepage
 \thispagestyle{empty}
 

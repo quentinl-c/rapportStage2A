@@ -1,6 +1,9 @@
 #TODO : Rapport de satge
-
-* Corriger la biblio 
+Glossaire :
+* NAT
+* Pare-feu
+* webSocket 
+* broadcast
 
 ##Biblio :
 * http://www.journaldunet.com/solutions/0601/060105_tribune-sqli-web-20.shtml
