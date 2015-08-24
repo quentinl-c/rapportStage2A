@@ -290,7 +290,7 @@ La Figure~\ref{fig:stun} représente de cette manière la place des serveurs STU
   \label{fig:stun}
 \end{figure}
 
-Le problème d'attribution d'adresses publiques étant résolu, les pairs vont alors tenter de s'interconnecter directement. La présence d'un serveur proxy ou d'un pare-feu peut cependant poser problème et empêcher l'établissement de la connexion. Dans ce cas-là, l'information doit transiter par un serveur TURN\footnote{Pour : Traversal Using Relays around NAT}. La Figure~\ref{fig:turn} représente la place occupée par un serveur TURN dans le contexte d'une connexion pair-à-pair bloquée parla présence d'un pare-feu ou d'un serveur proxy. Les serveurs TURN jouent alors le rôle de relais.
+Le problème d'attribution d'adresses publiques étant résolu, les pairs vont alors tenter de s'interconnecter directement. La présence d'un serveur proxy ou d'un pare-feu peut cependant poser problème et empêcher l'établissement de la connexion. Dans ce cas-là, l'information doit transiter par un serveur TURN\footnote{Pour : Traversal Using Relays around NAT}. La Figure~\ref{fig:turn} représente la place occupée par un serveur TURN dans le contexte d'une connexion pair-à-pair bloquée par la présence d'un pare-feu ou d'un serveur proxy. Les serveurs TURN jouent alors le rôle de relais.
 
 \begin{figure}[!h]
   \centering
@@ -307,13 +307,15 @@ Ces différents mécanismes permettent de répondre aux contraintes imposées pa
 
 J'ai pour mission d'intégrer un module de communication pair-à-pair dans l'application MUTE. Mon travail consiste donc à comprendre et appréhender l'architecture de MUTE, d'étudier et de choisir la librairie la plus adaptée pour utiliser la technologie webRTC et enfin de développer un module de communication pair-à-pair opérationnel.
 
+Les modalités concernant le rendu et l'organisation de mon stage sont précisées en Annex~\ref{sec:orga}.
+
 \section{Présentation du contexte et de la problématique détaillée}
 
 MUTE est une application développée en JavaScript, l'application côté serveur a été développée en NodeJS, l'application côté client utilise certains modules NodeJS, mais également des librairies JavaScript externes\footnote{JQuey, Ace-editor , etc.}.
 
 Le module de communication pair-à-pair sera intégré au même niveau que le module de communication client/serveur\footnote{Socket-io-adapter}. Les fonctionnalités initialement proposées seront conservées et l'utilisateur pourra choisir ou non d'utiliser la communication pair-à-pair. L'objectif n'est donc pas de modifier l'existant, mais d'adapter le module de communication pair-à-pair aux mécanismes déjà utilisés. Dans le cas où des modifications venaient à être effectuées sur les modules existants, elles ne devraient en rien  altérer le comportement des fonctionnalités existantes.
 
-L'objectif est d'aboutir à une topologie identique à celle décrite à la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les contributeurs sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs, et ce pour chaque document.
+L'objectif est d'aboutir à une topologie identique à celle décrite par la Figure~\ref{fig:topo-webRTC}. On remarque ainsi que tous les contributeurs sont interconnectés. De plus, une connexion persistante est établie entre le serveur et les clients de façon à ce que le serveur ait connaissance des contributeurs, et ce pour chaque document.
 
 \begin{figure}[!h]
   \centering
@@ -418,7 +420,7 @@ Il est important de remarquer que même si le module côté serveur porte le nom
 
 \subsubsection{Mécanismes implémentés}
 
-Le premier mécanisme implémenté et celui de l'ajout d'un contributeur. La Figure~\ref{fig:inscription} explicite les différentes phases par lesquelles le client doit passer pour rejoindre un document. Ainsi, quand un nouveau client tente de rejoindre à un document, il va tout d'abord contacter le serveur et lui donner son peerId. le serveur va en retour l'ajouter à la liste des contributeurs, lister l'ensemble des contributeurs actuellement présent et lui renvoyer cette liste accompagnée du numéro de site. Le client va donc créer une connexion\footnote{Implicitement, une connexion pair-à-pair} vers chacun de ces pairs. Une fois toutes ces connexions établies, le client peut communiquer directement avec tous les contributeurs du projet. Le client va demander une copie du document au premier pair de la liste que le serveur lui aura communiquée.
+Le premier mécanisme implémenté et celui de l'ajout d'un contributeur. La Figure~\ref{fig:inscription} explicite les différentes phases par lesquelles le client doit passer pour rejoindre un document. Ainsi, quand un nouveau client tente de rejoindre un document, il va tout d'abord contacter le serveur et lui donner son peerId. le serveur va en retour l'ajouter à la liste des contributeurs, lister l'ensemble des contributeurs actuellement présent et lui renvoyer cette liste accompagnée du numéro de site. Le client va donc créer une connexion\footnote{Implicitement, une connexion pair-à-pair} vers chacun de ces pairs. Une fois toutes ces connexions établies, le client peut communiquer directement avec tous les contributeurs du projet. Le client va demander une copie du document au premier pair de la liste que le serveur lui aura communiquée.
 
 Si c'est le client est le premier à rejoindre le document et que le document n'a pas encore était créé, le serveur instanciera alors la structure de données qui permettra de conserver la liste de contributeurs et ajoutera le client à cette liste. Dans le cas où le document est déjà créé, le serveur se chargera uniquement d'ajouter ce client à la liste des collaborateurs du document. 
 
@@ -435,7 +437,7 @@ Dans une majorité de cas, les messages sont envoyés à tous les pairs, seuls q
 
 Quand un client quitte le document, les connexions pair-à-pair avec les autres collaborateurs vont se fermer et la websocket partagée avec le serveur, va elle aussi se fermer. À la fermeture de la webSocket, le serveur va retirer le contributeur de la liste des collaborateurs et sur le même principe, tous les clients vont retirer le contributeur de leur liste au moment où la connexion pair-à-pair se rompt. 
 
-La Figure~\ref{fig:mute-archi-p2p} représente ainsi la nouvelle architecture et le mécanisme d'échange d'opérations texte, dans le même contexte que celui présenté par la Figure~\ref{fig:mute-archi}. Il est important de remarquer que le serveur n'a plus aucun rôle à jouer dans la communication des opérations textes, toutes ses fonctionnalités ont été reprises par le module Peer-io-adapter côté client. Les connexions webSocket sont uniquement maintenues pour que le serveur puisse répercuter la déconnexion d'un pair dans la liste des collaborateurs.
+La Figure~\ref{fig:mute-archi-p2p} représente ainsi la nouvelle architecture et le mécanisme d'échange d'opérations texte, dans le même contexte que celui présenté par la Figure~\ref{fig:mute-archi}. Il est important de remarquer que le serveur n'a plus aucun rôle à jouer dans la communication des opérations textes, toutes ses fonctionnalités ont été reprises par le module Peer-io-adapter côté client. Les connexions webSocket sont uniquement maintenues pour que le serveur puisse répercuter la déconnexion d'un pair sur la liste des collaborateurs.
 
 \begin{figure}[!h]
   \centering
@@ -475,13 +477,13 @@ Les algorithmes de gossip ou algorithmes probabilistes de dissémination d'infor
   \label{fig:topo-comp}
 \end{figure}
 
-Les algorithmes de gossip assurent l'équilibrage du réseau et la fiabilité des transmissions. De nombreux algorithmes existent et adoptent chacun une approche différente. L'étude de l'ensemble de ces algorithmes n'était pas réalisable dans le temps imparti et demandait des connaissances et un recul que je n'avais pas forcément. Pour me faciliter la tâche, j'ai repris les travaux de recherche\footnote{Référence bibliographique\cite{SCAMPLON}} portant également sur le développement d'un éditeur de texte collaboratif pair-à-pair implémentant différents algorithmes de gossip. Ces travaux présentent sur trois algorithmes : SCAMP, CYCLON et SCAMPLON\footnote{Fusion des deux premiers algorithmes}. J'ai choisi d'implémenter le premier algorithme qui me paraissait être le plus simple et le plus adapté à MUTE.
+Les algorithmes de gossip assurent l'équilibrage du réseau et la fiabilité des transmissions. De nombreux algorithmes existent et adoptent chacun une approche différente. L'étude de l'ensemble de ces algorithmes n'était pas réalisable dans le temps imparti et demandait des connaissances et un recul que je n'avais pas forcément. Pour me faciliter la tâche, j'ai repris les travaux de recherche\footnote{Référence bibliographique\cite{SCAMPLON}} portant également sur le développement d'un éditeur de texte collaboratif pair-à-pair implémentant différents algorithmes de gossip. Ces travaux portent sur trois algorithmes : SCAMP, CYCLON et SCAMPLON\footnote{Fusion des deux premiers algorithmes}. J'ai choisi d'implémenter le premier algorithme qui me paraissait être le plus simple et le plus adapté à MUTE.
 
 \subsection{Présentation de l'algorithme SCAMP}
 
-L'algorithme SCAMP\footnote{Pour : Scalable probabilistic membership protocol} appartient à la famille des algorithmes à échantillonnage réactif\footnote{Ou : \emph{Reactive peer smapling}}. L'objectif de cet algorithme est donc d'adapter la vue partielle de chaque noeud\footnote{Ou pair} à la taille du réseau, d'équilibrer et d'homogénéiser ce dernier. L'algorithme décrit également des mécanismes permettant d'éviter l'isolement d'un noeud.
+L'algorithme SCAMP\footnote{Pour : Scalable probabilistic membership protocol} appartient à la famille des algorithmes à échantillonnage réactif\footnote{Ou : \emph{Reactive peer smapling}}. L'objectif de cet algorithme est donc d'adapter la vue partielle\footnote{Ou voisinnage} de chaque noeud\footnote{Ou pair} à la taille du réseau, d'équilibrer et d'homogénéiser ce dernier. L'algorithme décrit également des mécanismes permettant d'éviter l'isolement d'un noeud.
 
-On considérera un réseau comportant n noeud et des noeuds de ce réseau, numérotés i, j, k. Une valeur c sera également considérée, et correspond à une constante liée au taux de perte et à la fiabilité du réseau.
+On considérera un réseau comportant n noeuds et des noeuds de ce réseau, numérotés i, j, k. Une valeur c sera également considérée, et correspond à une constante liée au taux de perte et à la fiabilité du réseau.
 
 L'intégration d'un nouveau noeud dans le réseau s'effectue de la manière suivante :
 \begin{enumerate}
@@ -509,7 +511,7 @@ Mon travail consistait à modifier les modules Peer-io-adapter et à développer
 L'inscription d'un nouveau collaborateur s'effectue de la manière suivante :
 \begin{enumerate}
   \item Lorsqu'un nouveau client A cherche à rejoindre le document, il envoie une demande au serveur et joint à cette dernière son peerId
-  \item En retour, le serveur va lui renvoyer son numéro de cite et le peerId d'un collaborateur selectionné aléatoirement
+  \item En retour, le serveur va lui renvoyer son numéro de site et le peerId d'un collaborateur selectionné aléatoirement
   \item Le client A va alors envoyer une demande d'inscription au collaborateur dont il vient de recevoir le peerId (client B)
   \item Le client B va alors accepté la demande ave une probabilité p = $\frac{1}{1 + nombreDeVoisins}$
   \item Si la demande est acceptée par le client B, la connexion entre A et B est maintenue, sinon la demande est transférée à un voisin de B
@@ -522,7 +524,7 @@ Les pairs ne sont plus tous directement interconnectés, la diffusion d'un messa
 Pour ce faire, j'ai implémenté un système de hop, c'est un dire : un compteur\footnote{Initialisé à une valeur > 0} attaché au message, qui est décrémenté à chaque transfert, lorsque le hop atteint 0, le message n'est plus transféré. Le réseau ne peut donc plus être inondé par les messages. En revanche, il est toujours possible qu'un pair reçoive deux fois ou plus la même information. Pour pallier à ce problème, j'ai attaché à chaque message un tuple composé du numéro de site et du numéro du message permettant d'identifier de manière unique chaque message. Lorqu'un message est émis ou reçu il est alors stocké dans une liste propre à chaque pair regroupant tous les messages déjà connus par ce dernier\footnote{Déjà émis ou reçu par le pair}. A la réception d'un message, si ce dernier est déjà connu du pair, il sera rejeté. 
 
 \subsubsection{Bilan}
-Mon travaillé consistait donc à implémenter ces différents mécanismes et à m'assurer que la communication avec les autres modules était toujours opérationnelle. Je n'ai pas pu mener le développement jusqu'à son terme, j'ai pu néanmoins faire fonctionner le partage des opérations texte entre tous les collaborateurs. La plus grande difficulté a été d'adapter l'algorithme, j'ai également pris conscience des difficultés que pouvait générer l'implémentation d'un algorithme à partir d'une description théorique.
+Mon travail consistait donc à implémenter ces différents mécanismes et à m'assurer que la communication avec les autres modules était toujours opérationnelle. Je n'ai pas pu mener le développement jusqu'à son terme, j'ai pu néanmoins faire fonctionner le partage des opérations texte entre tous les collaborateurs. La plus grande difficulté a été d'adapter l'algorithme, j'ai également pris conscience des difficultés que pouvait générer l'implémentation d'un algorithme à partir d'une description théorique.
 
 \chapter{Conclusion}
 Ce stage a été une expérience enrichanssante où j'ai dû faire preuve d'autonomie et de prise d'initiative. J'ai dû structurer mon travail et dialoguer avec différents acteurs pour mener à bien ma mission. L'appréhension d'un projet complexe tel que MUTE m'a permis de développer certaines compétences techniques. J'avais auparavant peu développé en JavaScript, ce projet m'a permis d'aborder la programmation évènementielle et sa complexité. En parallèle, j'ai eu l'occasion d'assister à des exposés réalisés par des chercheurs, cela m'a permis d'élargir ma culture scientifique et de prendre conscience des enjeux liés au monde de la recherche.
