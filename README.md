@@ -71,20 +71,20 @@ Introduction
 
 * Système fonctionnalité
 * Qui n'est pas dépendant du serveur
-* Toplogie "fully-meshed" pas assez efficace (transisiton vers les algorithmes de gossiping)
+* Toplogie "fully-meshed" pas assez efficace (transisiton vers les algorithmes de gossip)
 
-####3. Implémentation d'un système de gossiping pour MUTE
+####3. Implémentation d'un système de gossip pour MUTE
 
-#####1. Présentation rapide des algorithmes de Gossiping
+#####1. Présentation rapide des algorithmes de gossip
 
-* Qu'est-ce qu'un algorithme de gossiping
+* Qu'est-ce qu'un algorithme de gossip
 * Leur utilisation (big data, cloud cpmputing ...)
 
 #####2. Choix d'un algorithme SCAMP
 
 * un grand nombre d'algorithmes (SCAMP CYCLON et cie..)
 * De nombreuses recherches dans le domaine
-* CRATE éditeur p2p utilisant déjà un algo de gossiping
+* CRATE éditeur p2p utilisant déjà un algo de gossip
 * Choix de SCAMP
 * Présentation de SCAMP
 
@@ -95,5 +95,5 @@ Introduction
 
 ###Conclusion
 
-* SCAMP (gossiping en général), une piste de réflexion qui mériterait d’être approfondie
+* SCAMP (gossip en général), une piste de réflexion qui mériterait d’être approfondie
 * La sécurité dans ces réseaux ...
