@@ -68,13 +68,13 @@ L'exemple le plus marquant étant bien évidemment celui de Google qui propose u
 Google Slides et Google Forms. Toutes ces applications permettent de travailler en collaboration avec plusieurs acteurs sur un même 
 document. De plus, elles fournissent une interface utilisateur similaire à celles proposées par les applications "Desktops". 
 L'utilisateur n'est alors pas déstabilisé et retrouve aisément ses repères. La figure~\ref{fig:g-doc} présente ainsi l'interface de 
-Google Doc, une application permettant de faire du traitement de texte en édition collaborative.
+Google Docs, une application permettant de faire du traitement de texte en édition collaborative.
 
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=15cm]{figures/gdoc}
-  \caption{Interface de l'application Google Doc}
+  \caption{Interface de l'application Google Docs}
   \label{fig:g-doc}
 \end{figure}
 
@@ -154,9 +154,9 @@ Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des
 
 L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte\footnote{Une opération texte correspond à l'ajout ou la suppression d'un caractère dans le document}. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
 
-L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Doc. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
+L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Docs. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
 
-Une seconde approche plus appropriée consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'ordre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
+Une seconde approche plus appropriée\footnote{Référence  : \url{http://ubimob2014.sciencesconf.org/40104/document}} consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'ordre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
 
 \begin{figure}[!h]
   \centering
@@ -279,7 +279,7 @@ Il est important de préciser que le serveur de signaling ne fait pas l'objet de
 
 \subsubsection{Serveur STUN et TURN}
 
-Pour créer une connexion pair-à-pair, il est également nécessaire d'obtenir une adresse IP publique et un numéro de port sur lequel se connecter. De nombreux éléments intermédiaires comme les NAT peuvent empêcher l'obtention de ces informations. Pour pallier à ce problème webRTC spécifie l'utilisation de serveurs STUN\footnote{Pour : Simple Traversal of UDP through NATs} utilisant le protocole ICE\footnote{Pour : Interactive Connectivity Establishement}. Ce protocole\footnote{RFC de ICE : \url{https://tools.ietf.org/html/rfc5245}} permet donc de répurérer une adresse IP publique et un numéro de port même en cas de présence de NAT.
+Pour créer une connexion pair-à-pair, il est également nécessaire d'obtenir une adresse IP publique et un numéro de port sur lequel se connecter. De nombreux éléments intermédiaires comme les NAT peuvent empêcher l'obtention de ces informations. Pour pallier à ce problème webRTC, spécifie l'utilisation de serveurs STUN\footnote{Pour : Simple Traversal of UDP through NATs} utilisant le protocole ICE\footnote{Pour : Interactive Connectivity Establishement}. Ce protocole\footnote{RFC de ICE : \url{https://tools.ietf.org/html/rfc5245}} permet donc de répurérer une adresse IP publique et un numéro de port même en cas de présence de NAT.
 
 La Figure~\ref{fig:stun} représente de cette manière la place des serveurs STUN dans le contexte d'une connexion pair-à-pair. Le nuage aux contours bleus représente le serveur de signaling qui se charge de l'échange des messages de contrôle (notamment des adresses publiques), tandis que les serveurs STUN attribuent à chaque client une adresse IP publique est un numéro de port.
 
@@ -466,7 +466,7 @@ Les algorithmes de gossip constituent un domaine vaste de la recherche en inform
 
 \subsection{Présentation des algorithmes de gossip}
 
-Les algorithmes de gossip ou algorithme probabilistes de dissémination d'informations sont des algorithmes inspirés par la propagation des maladies au sein d'une population. Dans le cadre de notre réseau pair-à-pair, tous les noeuds ont une certaine probabilité d'être directement interconnectés. Tous les noeuds ne se connaissent plus directement entre eux, le réseau s'en trouve alors plus soulagé. Ces algorithmes s'intègrent dans de réseau de grande envergure\footnote{Réseau pouvant contenir plusieurs centaines de milliers de noeuds}.  La Figure~\ref{fig:topo-comp} présente les deux formes de topologie.
+Les algorithmes de gossip ou algorithmes probabilistes de dissémination d'informations sont des algorithmes inspirés par la propagation des maladies au sein d'une population. Dans le cadre de notre réseau pair-à-pair, tous les noeuds ont une certaine probabilité d'être directement interconnectés. Tous les noeuds ne se connaissent plus directement entre eux, le réseau s'en trouve alors plus soulagé. Ces algorithmes s'intègrent dans de réseau de grande envergure\footnote{Réseau pouvant contenir plusieurs centaines de milliers de noeuds}.  La Figure~\ref{fig:topo-comp} présente les deux formes de topologie.
 
 \begin{figure}[!h]
   \centering
@@ -503,31 +503,31 @@ L'algorithme SCAMP est un algorithme initialement développement pour des résea
   \label{fig:mute-archi-scamp}
 \end{figure}
 
-Mon travail consistait à modifier les modules Peer-io-adapter et à développer le module Scamp-io-adapter. J'ai dû avant toute chose, élaborer les mécanismes d'inscpription et d'échanges entre les collaborateurs.
+Mon travail consistait à modifier les modules Peer-io-adapter et à développer le module Scamp-io-adapter. J'ai dû avant toute chose, élaborer les mécanismes d'inscription et d'échanges entre les collaborateurs.
 
 \subsubsection{Inscription d'un collaborateur}
 L'inscription d'un nouveau collaborateur s'effectue de la manière suivante :
 \begin{enumerate}
-  \item Lorsqu'un nouveau client A chercher à rejoindre le document, il envoie une demande au serveur et joint à cette dernière son peerId
+  \item Lorsqu'un nouveau client A cherche à rejoindre le document, il envoie une demande au serveur et joint à cette dernière son peerId
   \item En retour, le serveur va lui renvoyer son numéro de cite et le peerId d'un collaborateur selectionné aléatoirement
-  \item Le client A va alors envoyé une demande d'insciption au collaborateur dont il vient de recevoir le peerId (client B)
+  \item Le client A va alors envoyer une demande d'inscription au collaborateur dont il vient de recevoir le peerId (client B)
   \item Le client B va alors accepté la demande ave une probabilité p = $\frac{1}{1 + nombreDeVoisins}$
-  \item Si la demande est acceptée par le client B, la connection entre A et B est maintenue, sinon la demande est transféré à un voisin de B
+  \item Si la demande est acceptée par le client B, la connexion entre A et B est maintenue, sinon la demande est transférée à un voisin de B
   \item La demande va alors parcourir le réseau jusqu'à ce que la demande soit acceptée\\
 \end{enumerate}
 
-\subsubsection{Echanges dans le réseau}
+\subsubsection{Échanges dans le réseau}
 Les pairs ne sont plus tous directement interconnectés, la diffusion d'un message à tous les pairs n'est donc plus aussi évidente. Les messages doivent donc être transférés de pair en pair pour que l'information puisse être communiquée à tous. Cependant, il faut veiller à ce que le réseau ne soit pas innondée et le pair ne reçoive pas deux fois la même information.
 
-Pour ce faire, j'ai implémenté un système de hop, c'est un dire : un compteur\footnote{Initialisé à une valeur > 0} attaché au message, qui est décrémenté à chaque tranfert, lorsque le hop atteint 0, le message n'est plus transféré. Le réseau ne peut donc plus être innondé par les messages. En revanche, il est toujours possible qu'un pair reçoive deux fois ou plus la même information. Pour pallier à ce problème, j'ai attaché à chaque message un tuple composé du numéro de site et du numéro du message permettant d'identifier de manière unique chaque message. Lorqu'un message est émis ou reçu il est alors stocké dans une liste propre à chaque pair regroupant tous les message déjà connus par ce dernier\footnote{Déjà émis ou reçu par le pair}. A la réception d'un message, si ce dernier est déjà connu du pair, il sera rejeté. 
+Pour ce faire, j'ai implémenté un système de hop, c'est un dire : un compteur\footnote{Initialisé à une valeur > 0} attaché au message, qui est décrémenté à chaque transfert, lorsque le hop atteint 0, le message n'est plus transféré. Le réseau ne peut donc plus être inondé par les messages. En revanche, il est toujours possible qu'un pair reçoive deux fois ou plus la même information. Pour pallier à ce problème, j'ai attaché à chaque message un tuple composé du numéro de site et du numéro du message permettant d'identifier de manière unique chaque message. Lorqu'un message est émis ou reçu il est alors stocké dans une liste propre à chaque pair regroupant tous les messages déjà connus par ce dernier\footnote{Déjà émis ou reçu par le pair}. A la réception d'un message, si ce dernier est déjà connu du pair, il sera rejeté. 
 
 \subsubsection{Bilan}
-Mon travaillé consistait donc à implémenter ces différents mécanismes et à m'assurer que la communication avec les autres modules était toujours opérationnelle. Je n'ai pas pu mener le développement jusqu'à son terme, j'ai pu néanmoins faire fonctionner le partage des opérations texte entre tous les collaborteurs. La plus grande difficulté a été de d'adapter l'algorithme, j'ai également pris cosncience des difficultés que pouvais générer l'implémentation d'un algorithme à partir d'une description théorique.
+Mon travaillé consistait donc à implémenter ces différents mécanismes et à m'assurer que la communication avec les autres modules était toujours opérationnelle. Je n'ai pas pu mener le développement jusqu'à son terme, j'ai pu néanmoins faire fonctionner le partage des opérations texte entre tous les collaborateurs. La plus grande difficulté a été d'adapter l'algorithme, j'ai également pris conscience des difficultés que pouvait générer l'implémentation d'un algorithme à partir d'une description théorique.
 
 \chapter{Conclusion}
-Ce stage a été une experience enrichanssante où j'ai dû faire preuve d'autonomie et de prise d'initiative. J'ai dû structuré mon travail et dialoguer avec différents acteur pour mener à bien ma mission. L'appréhension d'un projet complex tel que MUTE m'a permis de développer certaines compétences techniques. J'avais auparavant peu développé en JavaScript, ce projet m'a permis d'aborder la programmation évènementielle et sa complexité. En paralléle, j'ai eu l'occasion d'assister à des exposés réalisés par des chercheurs, cela m'a permis d'élergir ma culture scientifique et de prendre conscience des enjeux liés au monde de la recherche.
+Ce stage a été une expérience enrichanssante où j'ai dû faire preuve d'autonomie et de prise d'initiative. J'ai dû structurer mon travail et dialoguer avec différents acteurs pour mener à bien ma mission. L'appréhension d'un projet complexe tel que MUTE m'a permis de développer certaines compétences techniques. J'avais auparavant peu développé en JavaScript, ce projet m'a permis d'aborder la programmation évènementielle et sa complexité. En parallèle, j'ai eu l'occasion d'assister à des exposés réalisés par des chercheurs, cela m'a permis d'élargir ma culture scientifique et de prendre conscience des enjeux liés au monde de la recherche.
 
-
+L'ajout d'un module de communication pair-à-pair permet à présent d'étendre les recherches vers d'autres domaines, comme la sécurité dans les réseaux pair-à-pair ou le développement d'un algorithme de gossip. En effet, l'implémentation d'un réseau pair-à-pair permet une meilleure gestion des données. Les données ne sont plu stockées sur des serveurs dont on ne maitrise pas les politiques de sécurité, mais elles sont conservées directement sur les ordinateurs des collaborateurs. Le chiffrement et la mise en place de dispositifs de sécurité permettront à terme de garantir la sécurité des données. L'implémentation d'un algorithme de gossiping tel que cela a été entrepris permettra de profiter pleinement de la scalabilité des réseaux pair-à-pair. Ainsi, de nombreuses pistes de recherches s'ouvrent à l'édition collaborative. 
 
 \cleardoublepage
 
@@ -551,7 +551,7 @@ Ce stage a été une experience enrichanssante où j'ai dû faire preuve d'auton
 
 \textbf{Pare-feu :} Mécanisme de sécurité définissant les types de communication utilisés
 
-\textbf{webSocket :} Connection client/serveur persistante
+\textbf{webSocket :} Connexion client/serveur persistante
 
 \textbf{broadcast :} Action de diffuser un message vers tous les noeuds d'un même réseau
 
@@ -568,19 +568,19 @@ Ce stage a été une experience enrichanssante où j'ai dû faire preuve d'auton
 \section{Organisation et rendu du travail réalisé}
 \label{sec:orga}
 
-Le travail réalisé a été rendu sous la forme de pull-request adressées aux dépots de MUTE, accessible à ces adresses :
+Le travail réalisé a été rendu sous la forme de pull-request adressées aux dépôts de MUTE, accessible à ces adresses :
 \begin{itemize}
   \item MUTE client : \url{https://github.com/coast-team/mute-client}
   \item MUTE server : \url{https://github.com/coast-team/mute-server}
   \item MUTE demo : \url{https://github.com/coast-team/mute-demo}\\
 \end{itemize}
 
-L'organisation de mon travail est décrite par la Figure~\ref{fig:planning}. Avant de travailler sur la problèmatique proposée par le stage, j'ai réalisé une première mission pour François CHAROY, je devais adapter un framework de crowdsourcing nommmé Pybossa\footnote{Pour plus d'information : \url{http://pybossa.com/}} et déployer ce dernier sur un serveur AWS\footnote{Amazon Web Service}. J'ai eu l'occasion de découvrir les environement virtuels légers tels que Vagrant\footnote{Pour plus d'informaton : \url{https://www.vagrantup.com/}}, ainsi que les outils de déploiement.
+L'organisation de mon travail est décrite par la Figure~\ref{fig:planning}. Avant de travailler sur la problématique proposée par le stage, j'ai réalisé une première mission pour François CHAROY, je devais adapter un framework de crowdsourcing nommé Pybossa\footnote{Pour plus d'information : \url{http://pybossa.com/}} et déployer ce dernier sur un serveur AWS\footnote{Amazon Web Service}. J'ai eu l'occasion de découvrir les environnements virtuels légers tels que Vagrant\footnote{Pour plus d'information : \url{https://www.vagrantup.com/}}, ainsi que les outils de déploiement.
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=9cm]{figures/planning}
-  \caption{PLanning de travail}
+  \caption{Planning de travail}
   \label{fig:planning}
 \end{figure}
 
@@ -609,7 +609,7 @@ L'organisation de mon travail est décrite par la Figure~\ref{fig:planning}. Ava
 \section*{Résumé}
 \addcontentsline{toc}{chapter}{Résumé}
 
-Le but de ce projet était de développer un module de communication pair-à-pair pour l'éditeur de texte collaboratif MUTE. Je devais ainsi utiliser la technologie webRTC pour instancier les connexions pair-à-pair. Je devais selectionner une librairie exploitant cette technologie, développer  et intégrer le module dans l'application MUTE.
+Le but de ce projet était de développer un module de communication pair-à-pair pour l'éditeur de texte collaboratif MUTE. Je devais ainsi utiliser la technologie webRTC pour instancier les connexions pair-à-pair. Je devais sélectionner une librairie exploitant cette technologie, développer  et intégrer le module dans l'application MUTE.
 
 {\bf Mots-clés : webRTC, p2p, PeerJS, SCAMP, edition collaborative}
 
