@@ -127,7 +127,7 @@ La figure~\ref{fig:orga} représente ainsi l'organisation du LORIA
 \begin{figure}[h!]
   \centering
   \includegraphics[width=18cm]{figures/organization}
-  \caption{Organisation du Loria}
+  \caption{Organisation du Loria\emph{(figure issue de : \url{http://www.loria.fr/})}}
   \label{fig:orga}
 \end{figure}
 
@@ -154,9 +154,9 @@ Mon travail au sein de l'équipe s'intégrait principalement dans le domaine des
 
 L'application MUTE est un éditeur de texte collaboratif développé par Matthieu NICOLAS dans le cadre de la thèse de Luc ANDRÉ. La Figure~\ref{fig:screen-mute} représente l'interface proposée par l'application. Il se démarque des autres éditeurs par l'algorithme employé pour le traitement des opérations texte\footnote{Une opération texte correspond à l'ajout ou la suppression d'un caractère dans le document}. En effet, il existe deux grandes familles d'algorithme d'édition collaborative adoptant chacune une approche différente. 
 
-L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Docs. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement couteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
+L'approche la plus commune se nomme l'approche OT\footnote{Signifiant : Transformée Opérationnelles}, elle est employée dans de nombreux éditeurs de texte collaboratif, le plus connu étant Google Docs. Pour gérer les opérations concurrentes, l'algorithme utilise la transformée opérationnelle, qui résout les conflits en transformant une opération en fonction des autres opérations concurrentes. Cette méthode est relativement coûteuse et n'est pas adaptée à la solution pair-à-pair choisie. 
 
-Une seconde approche plus appropriée\footnote{Référence  : \url{http://ubimob2014.sciencesconf.org/40104/document}} consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'ordre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
+Une seconde approche plus appropriée\footnote{\emph{Référence bibliographique~\cite{shapiro:inria-00555588}}} consiste à introduire une nouvelle structure de données permettant l'application des opérations texte concurrentes de façons désordonnées. L'ordre d'arrivée des opérations n'a donc plus d'importance dans la résolution des conflits. Cette approche se nomme approche CRDT, pour Conflict-free Replicated Data Type. L’application MUTE utilise l'algorithme LogootSplit qui est issu de cette famille. Il a été proposé par Luc ANDRÉ dans le cadre de sa thèse.
 
 \begin{figure}[!h]
   \centering
@@ -220,7 +220,7 @@ Lorsqu'un client écrit dans l'éditeur, le module Ace-editor génère des opér
 
 \subsubsection{Avantages et limites de cette architecture}
 
-Cette architecture est adaptée pour le développement rapide d'un prototype fonctionnel. Elle permet une gestion centralisée des documents et les nombreuses librairies disponibles permettent de gérer de façon fiable les connexions client-serveur. Cependant cette architecture rencontre des problèmes de passage à l'échelle. En effet, le serveur devant gérer l'ensemble des documents et toutes les communications avec les clients peut se retrouver rapidement débordé si le nombre de documents et/ou de collaborateurs venait à augmenter. Une solution pourrait être d'augmenter les moyens matériels, à savoir la puissance des serveurs, cependant cette solution est relativement couteuse et non viable sur le long terme.
+Cette architecture est adaptée pour le développement rapide d'un prototype fonctionnel. Elle permet une gestion centralisée des documents et les nombreuses librairies disponibles permettent de gérer de façon fiable les connexions client-serveur. Cependant cette architecture rencontre des problèmes de passage à l'échelle. En effet, le serveur devant gérer l'ensemble des documents et toutes les communications avec les clients peut se retrouver rapidement débordé si le nombre de documents et/ou de collaborateurs venait à augmenter. Une solution pourrait être d'augmenter les moyens matériels, à savoir la puissance des serveurs, cependant cette solution est relativement coûteuse et non viable sur le long terme.
 
 Il est alors nécessaire de s'affranchir de cette architecture centralisée du moins pour les échanges d'opérations texte, de façon à soulager le serveur. Une solution est donc de créer des connexions directes entre les clients. Une technologie nommée webRTC permet de créer des connexions pair-à-pair entre clients par le biais d'un navigateur web. Cette solution a été retenue pour répondre au problème de scalabilité du système.
 
@@ -307,7 +307,7 @@ Ces différents mécanismes permettent de répondre aux contraintes imposées pa
 
 J'ai pour mission d'intégrer un module de communication pair-à-pair dans l'application MUTE. Mon travail consiste donc à comprendre et appréhender l'architecture de MUTE, d'étudier et de choisir la librairie la plus adaptée pour utiliser la technologie webRTC et enfin de développer un module de communication pair-à-pair opérationnel.
 
-Les modalités concernant le rendu et l'organisation de mon stage sont précisées en Annex~\ref{sec:orga}.
+Les modalités concernant le rendu et l'organisation de mon stage sont précisées en Annexe~\ref{sec:orga}.
 
 \section{Présentation du contexte et de la problématique détaillée}
 
